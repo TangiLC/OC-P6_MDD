@@ -12,7 +12,6 @@ import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -44,9 +43,9 @@ public class Article {
 
   @ManyToMany
   @JoinTable(
-      name = "ARTICLE_RELATIONS",
-      joinColumns = @JoinColumn(name = "article_id"),
-      inverseJoinColumns = @JoinColumn(name = "theme_id")
+    name = "ARTICLE_RELATIONS",
+    joinColumns = @JoinColumn(name = "article_id"),
+    inverseJoinColumns = @JoinColumn(name = "theme_id")
   )
   private Set<Theme> themes = new HashSet<>();
 
