@@ -38,17 +38,11 @@ CREATE TABLE
     COMMENTS (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         content TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-
--- Création de la table COMMENT-RELATIONS
-CREATE TABLE
-    COMMENT_RELATIONS (
-        id BIGINT AUTO_INCREMENT PRIMARY KEY,
-        article_id BIGINT NOT NULL,
-        user_id BIGINT,
-        FOREIGN KEY (article_id) REFERENCES ARTICLES (id) ON DELETE CASCADE,
-        FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE SET NULL
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        author_id BIGINT,
+        article_id BIGINT,
+        FOREIGN KEY (author_id) REFERENCES USERS (id) ON DELETE SET NULL,
+        FOREIGN KEY (article_id) REFERENCES ARTICLES (id) ON DELETE CASCADE
     );
 
 -- Création de la table ARTICLE-RELATIONS
