@@ -9,9 +9,11 @@ import com.openclassrooms.mddapi.models.User;
 import com.openclassrooms.mddapi.repositories.ArticleRepository;
 import com.openclassrooms.mddapi.repositories.ThemeRepository;
 import com.openclassrooms.mddapi.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,15 @@ public class ArticleService {
   private final ArticleRepository articleRepository;
   private final UserRepository userRepository;
   private final ThemeRepository themeRepository;
+
+  public ArticleDto getById(Long articleId) {
+    Optional<Article> article = articleRepository.findById(articleId);
+    return article
+      .map(this::mapToDto)
+      .orElseThrow(() ->
+        new NotFoundException("Article not found with ID: " + articleId)
+      );
+  }
 
   public Set<ArticleDto> getArticlesByTheme(Long themeId) {
     List<Article> articles = articleRepository.findArticlesByThemeId(themeId);

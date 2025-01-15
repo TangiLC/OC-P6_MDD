@@ -4,18 +4,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Table;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import org.springframework.data.annotation.Id;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
+@Table(name = "themes")
 public class Theme {
 
   @Id
