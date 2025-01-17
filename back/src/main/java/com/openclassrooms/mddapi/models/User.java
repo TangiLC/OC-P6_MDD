@@ -1,8 +1,5 @@
 package com.openclassrooms.mddapi.models;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +11,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -61,24 +60,4 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "theme_id")
   )
   private Set<Theme> themes = new HashSet<>();
-
-  /*// Utility methods for comments
-  public void addComment(Comment comment) {
-    comments.add(comment);
-    comment.setAuthorId(this.id);
-  }
-
-  public void removeComment(Comment comment) {
-    comments.remove(comment);
-    comment.setAuthorId(null);
-  }
-
-  // Utility methods for themes
-  public void addTheme(Theme theme) {
-    themes.add(theme);
-  }
-
-  public void removeTheme(Theme theme) {
-    themes.remove(theme);
-  }*/
 }

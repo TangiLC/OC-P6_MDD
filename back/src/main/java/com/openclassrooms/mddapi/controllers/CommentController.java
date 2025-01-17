@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/comment")
+@RequestMapping("/api/")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -34,7 +34,7 @@ public class CommentController {
       @ApiResponse(responseCode = "400", description = "Invalid input data"),
     }
   )
-  @PostMapping
+  @PostMapping("comment")
   public ResponseEntity<CommentDto> createComment(
     @RequestBody CreateCommentDto createCommentDto
   ) {
@@ -60,7 +60,7 @@ public class CommentController {
       ),
     }
   )
-  @GetMapping("/{id}")
+  @GetMapping("comment/{id}")
   public ResponseEntity<CommentDto> getCommentById(@PathVariable Long id) {
     CommentDto comment = commentService.getCommentById(id);
     return ResponseEntity.ok(comment);
@@ -89,7 +89,7 @@ public class CommentController {
       ),
     }
   )
-  @PutMapping("/{id}")
+  @PutMapping("comment/{id}")
   public ResponseEntity<CommentDto> updateComment(
     @PathVariable Long id,
     @RequestBody @Valid CommentDto updatedCommentDto
@@ -115,7 +115,7 @@ public class CommentController {
       ),
     }
   )
-  @DeleteMapping("/{id}")
+  @DeleteMapping("comment/{id}")
   public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
     commentService.deleteComment(id);
     return ResponseEntity.noContent().build();
@@ -131,7 +131,7 @@ public class CommentController {
       @ApiResponse(responseCode = "404", description = "Article not found"),
     }
   )
-  @GetMapping("/by_article/{articleId}")
+  @GetMapping("comments/by_article/{articleId}")
   public ResponseEntity<List<CommentDto>> getCommentsByArticle(
     @PathVariable Long articleId
   ) {
@@ -149,7 +149,7 @@ public class CommentController {
       @ApiResponse(responseCode = "404", description = "Author not found"),
     }
   )
-  @GetMapping("/by_author/{authorId}")
+  @GetMapping("comments/by_author/{authorId}")
   public ResponseEntity<List<CommentDto>> getCommentsByAuthor(
     @PathVariable Long authorId
   ) {

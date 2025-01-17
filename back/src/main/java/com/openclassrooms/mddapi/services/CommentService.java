@@ -90,6 +90,21 @@ public class CommentService {
       .orElseThrow(() ->
         new RuntimeException("Comment not found with ID: " + id)
       );
+
+    User authenticatedUser = getAuthenticatedUser();
+
+    boolean isAuthor = comment
+      .getAuthor()
+      .getId()
+      .equals(authenticatedUser.getId());
+    boolean isAdmin =
+      authenticatedUser.getIsAdmin() != null && authenticatedUser.getIsAdmin();
+
+    if (!isAuthor && !isAdmin) {
+      throw new AccessDeniedException(
+        "You can only delete your own comments or must be an admin"
+      );
+    }
     commentRepository.delete(comment);
   }
 

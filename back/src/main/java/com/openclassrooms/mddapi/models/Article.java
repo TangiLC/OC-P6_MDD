@@ -2,6 +2,7 @@ package com.openclassrooms.mddapi.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -43,7 +44,7 @@ public class Article {
   @JoinColumn(name = "author", referencedColumnName = "id")
   private User author;
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
     name = "ARTICLE_RELATIONS",
     joinColumns = @JoinColumn(name = "article_id"),

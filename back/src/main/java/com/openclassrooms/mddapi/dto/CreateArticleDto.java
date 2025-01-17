@@ -29,10 +29,6 @@ public class CreateArticleDto {
   private String content;
 
   @NotNull
-  @Schema(description = "author id", example = "1")
-  private Long authorId;
-
-  @NotNull
   @Schema(
     description = "Set of theme IDs to associate with the article",
     example = "[1, 2, 3]"

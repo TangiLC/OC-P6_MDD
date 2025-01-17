@@ -1,116 +1,165 @@
 package com.openclassrooms.mddapi.services;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
 import com.openclassrooms.mddapi.dto.ArticleDto;
 import com.openclassrooms.mddapi.dto.CreateArticleDto;
-import com.openclassrooms.mddapi.exceptions.NotFoundException;
 import com.openclassrooms.mddapi.models.Article;
 import com.openclassrooms.mddapi.models.Theme;
 import com.openclassrooms.mddapi.models.User;
 import com.openclassrooms.mddapi.repositories.ArticleRepository;
 import com.openclassrooms.mddapi.repositories.ThemeRepository;
-import com.openclassrooms.mddapi.repositories.UserRepository;
-
+import com.openclassrooms.mddapi.security.UserPrincipal;
 import jakarta.transaction.Transactional;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
+import org.hibernate.Hibernate;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ArticleService {
 
   private final ArticleRepository articleRepository;
-  private final UserRepository userRepository;
   private final ThemeRepository themeRepository;
-
-  public ArticleDto getById(Long articleId) {
-    Optional<Article> article = articleRepository.findById(articleId);
-    return article
-      .map(this::mapToDto)
-      .orElseThrow(() ->
-        new NotFoundException("Article not found with ID: " + articleId)
-      );
-  }
-
-  public Set<ArticleDto> getArticlesByTheme(Long themeId) {
-    List<Article> articles = articleRepository.findArticlesByThemeId(themeId);
-    return articles.stream().map(this::mapToDto).collect(Collectors.toSet());
-  }
-
-  public Set<ArticleDto> getArticlesByAuthor(Long authorId) {
-    List<Article> articles = articleRepository.findByAuthorId(authorId);
-    return articles.stream().map(this::mapToDto).collect(Collectors.toSet());
-  }
 
   @Transactional
   public ArticleDto createArticle(CreateArticleDto createArticleDto) {
-    // get author Id
-    User author = userRepository
-      .findById(createArticleDto.getAuthorId())
-      .orElseThrow(() ->
-        new NotFoundException(
-          "Author id not found: " + createArticleDto.getAuthorId()
-        )
-      );
-
-    // get themes Ids
     List<Theme> themes = themeRepository.findAllById(
       createArticleDto.getThemeIds()
     );
     if (
       themes.isEmpty() || themes.size() != createArticleDto.getThemeIds().size()
     ) {
-      throw new NotFoundException("One or more themes not found");
+      throw new RuntimeException("One or more themes not found");
     }
 
-    // Create new article
     Article article = new Article();
     article.setTitle(createArticleDto.getTitle());
     article.setContent(createArticleDto.getContent());
-    article.setAuthor(author);
-    article.setThemes(new HashSet<>(themes));
+    article.setAuthor(getAuthenticatedUser());
 
-    // Save in bdd
     Article savedArticle = articleRepository.save(article);
 
-    // Convert to Dto and return
-    return mapToDto(savedArticle);
+    Set<Theme> themeSet = new HashSet<>(themes);
+    savedArticle.setThemes(themeSet);
+    savedArticle = articleRepository.save(article);
+    return toDto(savedArticle);
   }
 
   @Transactional
   public ArticleDto updateArticle(Long id, ArticleDto updateArticleDto) {
     Article article = articleRepository
       .findById(id)
-      .orElseThrow(() -> new NotFoundException("Article not found: " + id));
+      .orElseThrow(() ->
+        new RuntimeException("Article not found with ID: " + id)
+      );
+
+    User authenticatedUser = getAuthenticatedUser();
+    if (!article.getAuthor().getId().equals(authenticatedUser.getId())) {
+      throw new AccessDeniedException("You can only modify your own articles");
+    }
+
+    List<Theme> themes = themeRepository.findAllById(
+      updateArticleDto.getThemeIds()
+    );
+    if (
+      themes.isEmpty() || themes.size() != updateArticleDto.getThemeIds().size()
+    ) {
+      throw new RuntimeException("One or more themes not found");
+    }
 
     article.setTitle(updateArticleDto.getTitle());
     article.setContent(updateArticleDto.getContent());
-    articleRepository.save(article);
 
-    return mapToDto(article);
+    Set<Theme> themeSet = new HashSet<>(themes);
+    article.setThemes(themeSet);
+
+    Article updatedArticle = articleRepository.save(article);
+    return toDto(updatedArticle);
+  }
+
+  public void deleteArticle(Long id) {
+    Article article = articleRepository
+      .findById(id)
+      .orElseThrow(() ->
+        new RuntimeException("Article not found with ID: " + id)
+      );
+
+    User authenticatedUser = getAuthenticatedUser();
+    boolean isAuthor = article
+      .getAuthor()
+      .getId()
+      .equals(authenticatedUser.getId());
+    boolean isAdmin =
+      authenticatedUser.getIsAdmin() != null && authenticatedUser.getIsAdmin();
+
+    if (!isAuthor && !isAdmin) {
+      throw new AccessDeniedException(
+        "You can only delete your own articles or must be an admin"
+      );
+    }
+
+    articleRepository.delete(article);
   }
 
   @Transactional
-  public void deleteArticle(Long id) {
-    if (!articleRepository.existsById(id)) {
-      throw new NotFoundException("Article not found: " + id);
-    }
-    articleRepository.deleteById(id);
+  public ArticleDto getArticleById(Long articleId) {
+    Article article = articleRepository
+      .findByIdWithThemes(articleId)
+      .orElseThrow(() ->
+        new RuntimeException("Article not found with ID: " + articleId)
+      );
+
+    Hibernate.initialize(article.getThemes());
+
+    
+    return toDto(article);
   }
 
-  private ArticleDto mapToDto(Article article) {
+  public List<ArticleDto> getArticlesByAuthor(Long authorId) {
+    return articleRepository
+      .findByAuthorId(authorId)
+      .stream()
+      .map(this::toDto)
+      .collect(Collectors.toList());
+  }
+
+  public List<ArticleDto> getArticlesByThemeId(Long themeId) {
+    return articleRepository
+      .findArticlesByThemeId(themeId)
+      .stream()
+      .map(this::toDto)
+      .collect(Collectors.toList());
+  }
+
+  private User getAuthenticatedUser() {
+    Authentication authentication = SecurityContextHolder
+      .getContext()
+      .getAuthentication();
+    if (
+      authentication != null &&
+      authentication.getPrincipal() instanceof UserPrincipal
+    ) {
+      UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+      return userPrincipal.getUser();
+    }
+    throw new RuntimeException("No authenticated user found");
+  }
+
+  private ArticleDto toDto(Article article) {
     Set<Long> themeIds = article
       .getThemes()
       .stream()
       .map(Theme::getId)
       .collect(Collectors.toSet());
+      
 
     return ArticleDto
       .builder()
@@ -120,8 +169,8 @@ public class ArticleService {
       .createdAt(article.getCreatedAt())
       .updatedAt(article.getUpdatedAt())
       .authorUsername(article.getAuthor().getUsername())
-      .themesSet(themeIds)
-      .commentsSet(Set.of())
+      .themeIds(themeIds)
+      .commentIds(Set.of())
       .build();
   }
 }
