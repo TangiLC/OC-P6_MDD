@@ -62,15 +62,15 @@ public class User {
   )
   private Set<Theme> themes = new HashSet<>();
 
-  // Utility methods for comments
+  /*// Utility methods for comments
   public void addComment(Comment comment) {
     comments.add(comment);
-    comment.setAuthor(this);
+    comment.setAuthorId(this.id);
   }
 
   public void removeComment(Comment comment) {
     comments.remove(comment);
-    comment.setAuthor(null);
+    comment.setAuthorId(null);
   }
 
   // Utility methods for themes
@@ -80,5 +80,5 @@ public class User {
 
   public void removeTheme(Theme theme) {
     themes.remove(theme);
-  }
+  }*/
 }
