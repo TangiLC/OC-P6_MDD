@@ -1,5 +1,7 @@
 package com.openclassrooms.mddapi.models;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,8 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-
-import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -31,11 +31,15 @@ public class Comment {
   private LocalDateTime createdAt = LocalDateTime.now();
 
   @ManyToOne
-  @JoinColumn(name = "author_id", referencedColumnName = "id")
+  @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = true)
   private User author;
 
   @ManyToOne
-  @JoinColumn(name = "article_id", referencedColumnName = "id")
+  @JoinColumn(
+    name = "article_id",
+    referencedColumnName = "id",
+    nullable = false
+  )
   private Article article;
 
   @PrePersist

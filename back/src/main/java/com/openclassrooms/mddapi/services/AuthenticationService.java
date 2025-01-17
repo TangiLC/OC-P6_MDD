@@ -1,18 +1,18 @@
 package com.openclassrooms.mddapi.services;
 
-import com.openclassrooms.mddapi.exceptions.BadCredentialsException;
-import com.openclassrooms.mddapi.exceptions.NotFoundException;
-import com.openclassrooms.mddapi.models.User;
-import com.openclassrooms.mddapi.repositories.UserRepository;
-import com.openclassrooms.mddapi.security.UserPrincipal;
-import com.openclassrooms.mddapi.security.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import com.openclassrooms.mddapi.exceptions.CustomBadCredentialsException;
+import com.openclassrooms.mddapi.exceptions.NotFoundException;
+import com.openclassrooms.mddapi.models.User;
+import com.openclassrooms.mddapi.repositories.UserRepository;
+import com.openclassrooms.mddapi.security.UserPrincipal;
+import com.openclassrooms.mddapi.security.utils.JwtTokenUtil;
 
 @Service
 public class AuthenticationService {
@@ -41,10 +41,10 @@ public class AuthenticationService {
         UserPrincipal userPrincipal = new UserPrincipal(user);
         return jwtTokenUtil.generateToken(userPrincipal);
       } else {
-        throw new BadCredentialsException("Authentification échouée");
+        throw new CustomBadCredentialsException("Authentification échouée");
       }
     } catch (AuthenticationException e) {
-      throw new BadCredentialsException(
+      throw new CustomBadCredentialsException(
         "Nom d'utilisateur ou mot de passe incorrect"
       );
     }

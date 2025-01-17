@@ -29,7 +29,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final JwtTokenUtil jwtTokenUtil;
   private final CustomUserDetailsService userDetailsService;
 
-  // Utiliser un constructeur avec tous les dépendances plutôt que @Autowired
   public JwtAuthenticationFilter(
     JwtTokenUtil jwtTokenUtil,
     CustomUserDetailsService userDetailsService
@@ -48,7 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     try {
       String jwt = parseJwt(request);
 
-      // Déplacer la validation du token dans un bloc try-catch séparé
       if (jwt != null) {
         if (!jwtTokenUtil.validateToken(jwt)) {
           logger.warn("Invalid JWT token");
@@ -63,7 +61,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             username
           );
 
-          // Vérifier si l'utilisateur est toujours valide
           if (userDetails != null && userDetails.isEnabled()) {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
               userDetails,

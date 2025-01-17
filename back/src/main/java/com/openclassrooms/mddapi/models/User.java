@@ -1,17 +1,29 @@
 package com.openclassrooms.mddapi.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@ToString(exclude = { "comments", "themes" })
 @Table(name = "users")
 public class User {
 
@@ -34,4 +46,39 @@ public class User {
 
   @Column(nullable = false, name = "is_admin")
   private Boolean isAdmin;
+
+  @OneToMany(
+    mappedBy = "author",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
+  private Set<Comment> comments = new HashSet<>();
+
+  @ManyToMany
+  @JoinTable(
+    name = "user_themes",
+    joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "theme_id")
+  )
+  private Set<Theme> themes = new HashSet<>();
+
+  // Utility methods for comments
+  public void addComment(Comment comment) {
+    comments.add(comment);
+    comment.setAuthor(this);
+  }
+
+  public void removeComment(Comment comment) {
+    comments.remove(comment);
+    comment.setAuthor(null);
+  }
+
+  // Utility methods for themes
+  public void addTheme(Theme theme) {
+    themes.add(theme);
+  }
+
+  public void removeTheme(Theme theme) {
+    themes.remove(theme);
+  }
 }

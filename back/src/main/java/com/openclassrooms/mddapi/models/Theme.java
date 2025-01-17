@@ -1,5 +1,8 @@
 package com.openclassrooms.mddapi.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,9 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-
-import java.util.HashSet;
-import java.util.Set;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +21,7 @@ public class Theme {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  //@Column(nullable = false, unique = true, name = "id")
   private Long id;
 
   @Column(nullable = false, length = 255)

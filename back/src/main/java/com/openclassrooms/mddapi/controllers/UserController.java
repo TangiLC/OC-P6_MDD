@@ -1,21 +1,14 @@
 package com.openclassrooms.mddapi.controllers;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import static java.time.LocalDateTime.now;
 
+import com.openclassrooms.mddapi.dto.ErrorResponse;
+import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.dto.auth.JwtResponse;
 import com.openclassrooms.mddapi.dto.auth.LoginRequest;
 import com.openclassrooms.mddapi.dto.auth.RegisterRequest;
+import com.openclassrooms.mddapi.models.Comment;
+import com.openclassrooms.mddapi.models.Theme;
 import com.openclassrooms.mddapi.models.User;
 import com.openclassrooms.mddapi.repositories.UserRepository;
 import com.openclassrooms.mddapi.security.UserPrincipal;
@@ -28,8 +21,30 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.transaction.Transactional;
+
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api")
 @Validated
 public class UserController {
 
@@ -76,28 +91,35 @@ public class UserController {
       ),
     }
   )
-  @PostMapping("/login")
+  @PostMapping("/auth/login")
   public ResponseEntity<?> authenticateUser(
     @RequestBody @Valid LoginRequest loginRequest
   ) {
-    String login = loginRequest.getUserIdentity();
-    User user = userRepository
-      .findByUsernameOrEmail(login, login)
-      .orElseThrow(() ->
-        new UsernameNotFoundException("username or email unknown")
+    try {
+      String login = loginRequest.getUserIdentity();
+      User user = userRepository
+        .findByUsernameOrEmail(login, login)
+        .orElseThrow(() ->
+          new BadCredentialsException("Identifiants incorrects")
+        );
+
+      Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+          user.getUsername(),
+          loginRequest.getPassword()
+        )
       );
 
-    Authentication authentication = authenticationManager.authenticate(
-      new UsernamePasswordAuthenticationToken(
-        user.getUsername(),
-        loginRequest.getPassword()
-      )
-    );
-
-    UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-    String jwt = jwtTokenUtil.generateToken((UserPrincipal) userDetails);
-
-    return ResponseEntity.ok(new JwtResponse(jwt));
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      String jwt = jwtTokenUtil.generateToken((UserPrincipal) userDetails);
+      return ResponseEntity.ok(new JwtResponse(jwt));
+    } catch (AuthenticationException e) {
+      return ResponseEntity
+        .status(HttpStatus.UNAUTHORIZED)
+        .body(
+          new ErrorResponse(401, "Identifiants incorrects", now().toString())
+        );
+    }
   }
 
   /**
@@ -125,7 +147,7 @@ public class UserController {
       ),
     }
   )
-  @PostMapping("/register")
+  @PostMapping("/auth/register")
   public ResponseEntity<?> registerUser(
     @RequestBody @Valid RegisterRequest registerRequest
   ) {
@@ -148,5 +170,67 @@ public class UserController {
 
     userRepository.save(user);
     return ResponseEntity.ok("User registered successfully!");
+  }
+
+  /**
+   * Retrieve the authenticated user's information.
+   *
+   * @param userDetails The currently authenticated user's details.
+   * @return A ResponseEntity containing the user's information.
+   */
+  @Operation(
+    summary = "Retrieve the authenticated user's information.",
+    description = "Fetches the details of the currently authenticated user."
+  )
+  @ApiResponses(
+    value = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "User information retrieved successfully",
+        content = @Content(schema = @Schema(implementation = UserDto.class))
+      ),
+      @ApiResponse(
+        responseCode = "401",
+        description = "Unauthorized access",
+        content = @Content
+      ),
+    }
+  )
+  @Transactional
+  @GetMapping("/me")
+  public ResponseEntity<UserDto> getAuthenticatedUser(
+    @AuthenticationPrincipal UserPrincipal userPrincipal
+  ) {
+    if (userPrincipal == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    User user = userRepository
+      .findByUsername(userPrincipal.getUsername())
+      .orElseThrow(() ->
+        new RuntimeException(
+          "User not found with username: " + userPrincipal.getUsername()
+        )
+      );
+
+    // Map the user's themes to a list of theme names
+    List<Long> themesIds = user.getThemes().stream().map(Theme::getId).toList();
+    List<Long> commentsIds = user
+      .getComments()
+      .stream()
+      .map(Comment::getId)
+      .toList();
+
+    UserDto userDto = new UserDto(
+      user.getId(),
+      user.getEmail(),
+      user.getUsername(),
+      user.getPicture(),
+      //user.getIsAdmin(),
+      themesIds,
+      commentsIds
+    );
+
+    return ResponseEntity.ok(userDto);
   }
 }
