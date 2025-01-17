@@ -54,3 +54,13 @@ CREATE TABLE
         FOREIGN KEY (theme_id) REFERENCES THEMES (id) ON DELETE CASCADE,
         PRIMARY KEY (article_id, theme_id)
     );
+
+-- Création de la table USER_THEMES
+CREATE TABLE
+    USER_THEMES (
+        user_id BIGINT NOT NULL,
+        theme_id BIGINT NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES USERS (id) ON DELETE CASCADE,
+        FOREIGN KEY (theme_id) REFERENCES THEMES (id) ON DELETE CASCADE,
+        PRIMARY KEY (user_id, theme_id)
+    );
