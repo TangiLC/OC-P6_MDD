@@ -1,18 +1,5 @@
 package com.openclassrooms.mddapi.controllers;
 
-import com.openclassrooms.mddapi.dto.auth.JwtResponse;
-import com.openclassrooms.mddapi.dto.auth.LoginRequest;
-import com.openclassrooms.mddapi.dto.auth.RegisterRequest;
-import com.openclassrooms.mddapi.models.User;
-import com.openclassrooms.mddapi.repositories.UserRepository;
-import com.openclassrooms.mddapi.security.UserPrincipal;
-import com.openclassrooms.mddapi.security.utils.JwtTokenUtil;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,7 +8,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.openclassrooms.mddapi.dto.auth.JwtResponse;
+import com.openclassrooms.mddapi.dto.auth.LoginRequest;
+import com.openclassrooms.mddapi.dto.auth.RegisterRequest;
+import com.openclassrooms.mddapi.models.User;
+import com.openclassrooms.mddapi.repositories.UserRepository;
+import com.openclassrooms.mddapi.security.UserPrincipal;
+import com.openclassrooms.mddapi.security.utils.JwtTokenUtil;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -55,7 +60,7 @@ public class UserController {
     summary = "Authenticate a user and generate a JWT token.",
     description = "Allows a user to log in using their username or email and password," +
     " and returns a JWT token upon successful authentication.",
-    security={}
+    security = {}
   )
   @ApiResponses(
     value = {
@@ -75,15 +80,11 @@ public class UserController {
   public ResponseEntity<?> authenticateUser(
     @RequestBody @Valid LoginRequest loginRequest
   ) {
-    String login = loginRequest.getUsername();
+    String login = loginRequest.getUserIdentity();
     User user = userRepository
-      .findByUsername(login)
-      /*.orElse( // if identity is not username, is it email ?
-        userRepository
-          .findByEmail(login)*/
-          .orElseThrow(() ->
-            new UsernameNotFoundException("username or email unknown")
-          //)
+      .findByUsernameOrEmail(login, login)
+      .orElseThrow(() ->
+        new UsernameNotFoundException("username or email unknown")
       );
 
     Authentication authentication = authenticationManager.authenticate(
