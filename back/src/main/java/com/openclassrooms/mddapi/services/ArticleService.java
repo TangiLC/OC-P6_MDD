@@ -3,24 +3,23 @@ package com.openclassrooms.mddapi.services;
 import com.openclassrooms.mddapi.dto.ArticleDto;
 import com.openclassrooms.mddapi.dto.CreateArticleDto;
 import com.openclassrooms.mddapi.models.Article;
+import com.openclassrooms.mddapi.models.Comment;
 import com.openclassrooms.mddapi.models.Theme;
 import com.openclassrooms.mddapi.models.User;
 import com.openclassrooms.mddapi.repositories.ArticleRepository;
 import com.openclassrooms.mddapi.repositories.ThemeRepository;
 import com.openclassrooms.mddapi.security.UserPrincipal;
-import jakarta.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-
 import org.hibernate.Hibernate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -109,21 +108,18 @@ public class ArticleService {
     articleRepository.delete(article);
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public ArticleDto getArticleById(Long articleId) {
     Article article = articleRepository
-      .findByIdWithThemes(articleId)
+      .findArticleById(articleId)
       .orElseThrow(() ->
         new RuntimeException("Article not found with ID: " + articleId)
       );
 
-    Hibernate.initialize(article.getThemes());
-
-    
     return toDto(article);
   }
 
-  public List<ArticleDto> getArticlesByAuthor(Long authorId) {
+  /*public List<ArticleDto> getArticlesByAuthor(Long authorId) {
     return articleRepository
       .findByAuthorId(authorId)
       .stream()
@@ -137,7 +133,7 @@ public class ArticleService {
       .stream()
       .map(this::toDto)
       .collect(Collectors.toList());
-  }
+  }*/
 
   private User getAuthenticatedUser() {
     Authentication authentication = SecurityContextHolder
@@ -153,13 +149,23 @@ public class ArticleService {
     throw new RuntimeException("No authenticated user found");
   }
 
-  private ArticleDto toDto(Article article) {
-    Set<Long> themeIds = article
-      .getThemes()
-      .stream()
-      .map(Theme::getId)
-      .collect(Collectors.toSet());
-      
+  @Transactional(readOnly = true)
+  public ArticleDto toDto(Article article) {
+    Set<Long> themeIds = article.getThemes() != null
+      ? article
+        .getThemes()
+        .stream()
+        .map(Theme::getId)
+        .collect(Collectors.toSet())
+      : new HashSet<>();
+
+    Set<Long> commentIds = article.getComments() != null
+      ? article
+        .getComments()
+        .stream()
+        .map(Comment::getId)
+        .collect(Collectors.toSet())
+      : new HashSet<>();
 
     return ArticleDto
       .builder()
@@ -168,9 +174,11 @@ public class ArticleService {
       .content(article.getContent())
       .createdAt(article.getCreatedAt())
       .updatedAt(article.getUpdatedAt())
-      .authorUsername(article.getAuthor().getUsername())
+      .authorUsername(
+        article.getAuthor() != null ? article.getAuthor().getUsername() : null
+      )
       .themeIds(themeIds)
-      .commentIds(Set.of())
+      .commentIds(commentIds)
       .build();
   }
 }

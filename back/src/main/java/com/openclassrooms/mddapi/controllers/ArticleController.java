@@ -10,7 +10,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -115,7 +115,7 @@ public class ArticleController {
    *
    * @param themeId the ID of the theme
    * @return a set of articles as ArticleDto objects
-   */
+   
   @Operation(
     summary = "Get articles by theme",
     description = "Retrieves all articles associated with the specified theme."
@@ -149,15 +149,15 @@ public class ArticleController {
   ) {
     List<ArticleDto> articles = articleService.getArticlesByThemeId(themeId);
     return ResponseEntity.ok(articles);
-  }
+  }*/
 
   /**
    * Get all articles created by a specific author.
    *
    * @param authorId the ID of the author
    * @return a set of articles as ArticleDto objects
-   */
-  @Operation(
+   
+   @Operation(
     summary = "Get articles by author",
     description = "Retrieves all articles created by the specified author."
   )
@@ -190,7 +190,7 @@ public class ArticleController {
   ) {
     List<ArticleDto> articles = articleService.getArticlesByAuthor(authorId);
     return ResponseEntity.ok(articles);
-  }
+  }*/
 
   /**
    * Update an article by its ID.
