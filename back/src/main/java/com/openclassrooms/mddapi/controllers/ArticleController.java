@@ -1,7 +1,19 @@
 package com.openclassrooms.mddapi.controllers;
 
-import java.util.Set;
-
+import com.openclassrooms.mddapi.dto.ArticleDto;
+import com.openclassrooms.mddapi.dto.CreateArticleDto;
+import com.openclassrooms.mddapi.dto.ErrorResponse;
+import com.openclassrooms.mddapi.services.ArticleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.transaction.annotation.Transactional;
+import jakarta.validation.Valid;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,20 +25,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.openclassrooms.mddapi.dto.ArticleDto;
-import com.openclassrooms.mddapi.dto.CreateArticleDto;
-import com.openclassrooms.mddapi.dto.ErrorResponse;
-import com.openclassrooms.mddapi.services.ArticleService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
 /**
  * Controller for managing articles.
  */
@@ -37,16 +35,7 @@ public class ArticleController {
 
   private final ArticleService articleService;
 
-  /**
-   * Create a new article.
-   *
-   * @param createArticleDto the data transfer object containing article creation details
-   * @return the created article as an ArticleDto
-   */
-  @Operation(
-    summary = "Create a new article",
-    description = "Adds a new article with the provided details."
-  )
+  @Operation(summary = "Create a new article")
   @ApiResponses(
     {
       @ApiResponse(
@@ -65,6 +54,14 @@ public class ArticleController {
           schema = @Schema(implementation = ErrorResponse.class)
         )
       ),
+      @ApiResponse(
+        responseCode = "403",
+        description = "Access denied",
+        content = @Content(
+          mediaType = "application/json",
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
     }
   )
   @PostMapping
@@ -75,6 +72,7 @@ public class ArticleController {
     return ResponseEntity.status(HttpStatus.CREATED).body(createdArticle);
   }
 
+ 
   /**
    * Get article by id.
    *
@@ -105,9 +103,10 @@ public class ArticleController {
       ),
     }
   )
+  @Transactional
   @GetMapping("/{id}")
   public ResponseEntity<ArticleDto> getById(@PathVariable Long id) {
-    ArticleDto article = articleService.getById(id);
+    ArticleDto article = articleService.getArticleById(id);
     return ResponseEntity.ok(article);
   }
 
@@ -116,7 +115,7 @@ public class ArticleController {
    *
    * @param themeId the ID of the theme
    * @return a set of articles as ArticleDto objects
-   */
+   
   @Operation(
     summary = "Get articles by theme",
     description = "Retrieves all articles associated with the specified theme."
@@ -143,21 +142,22 @@ public class ArticleController {
       ),
     }
   )
+  @Transactional
   @GetMapping("/by_theme/{themeId}")
-  public ResponseEntity<Set<ArticleDto>> getByTheme(
+  public ResponseEntity<List<ArticleDto>> getByTheme(
     @PathVariable Long themeId
   ) {
-    Set<ArticleDto> articles = articleService.getArticlesByTheme(themeId);
+    List<ArticleDto> articles = articleService.getArticlesByThemeId(themeId);
     return ResponseEntity.ok(articles);
-  }
+  }*/
 
   /**
    * Get all articles created by a specific author.
    *
    * @param authorId the ID of the author
    * @return a set of articles as ArticleDto objects
-   */
-  @Operation(
+   
+   @Operation(
     summary = "Get articles by author",
     description = "Retrieves all articles created by the specified author."
   )
@@ -183,13 +183,14 @@ public class ArticleController {
       ),
     }
   )
+  @Transactional
   @GetMapping("/by_author/{authorId}")
-  public ResponseEntity<Set<ArticleDto>> getByAuthor(
+  public ResponseEntity<List<ArticleDto>> getByAuthor(
     @PathVariable Long authorId
   ) {
-    Set<ArticleDto> articles = articleService.getArticlesByAuthor(authorId);
+    List<ArticleDto> articles = articleService.getArticlesByAuthor(authorId);
     return ResponseEntity.ok(articles);
-  }
+  }*/
 
   /**
    * Update an article by its ID.
@@ -221,6 +222,14 @@ public class ArticleController {
         )
       ),
       @ApiResponse(
+        responseCode = "403",
+        description = "Access denied - Only the author can update their article",
+        content = @Content(
+          mediaType = "application/json",
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+      @ApiResponse(
         responseCode = "404",
         description = "Article not found",
         content = @Content(
@@ -230,6 +239,7 @@ public class ArticleController {
       ),
     }
   )
+  @Transactional
   @PutMapping("/{id}")
   public ResponseEntity<ArticleDto> updateArticle(
     @PathVariable Long id,
@@ -242,7 +252,7 @@ public class ArticleController {
     return ResponseEntity.ok(updatedArticle);
   }
 
-  /**
+   /**
    * Delete an article by its ID.
    *
    * @param id the ID of the article to delete
@@ -259,6 +269,14 @@ public class ArticleController {
         description = "Article deleted successfully"
       ),
       @ApiResponse(
+        responseCode = "403",
+        description = "Access denied - Only the author or admin can delete the article",
+        content = @Content(
+          mediaType = "application/json",
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+      @ApiResponse(
         responseCode = "404",
         description = "Article not found",
         content = @Content(
@@ -268,6 +286,7 @@ public class ArticleController {
       ),
     }
   )
+  @Transactional
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
     articleService.deleteArticle(id);

@@ -47,7 +47,7 @@ CREATE TABLE
 
 -- Création de la table ARTICLE-RELATIONS
 CREATE TABLE
-    ARTICLE_RELATIONS (
+    ARTICLE_THEMES (
         article_id BIGINT NOT NULL,
         theme_id BIGINT NOT NULL,
         FOREIGN KEY (article_id) REFERENCES ARTICLES (id) ON DELETE CASCADE,

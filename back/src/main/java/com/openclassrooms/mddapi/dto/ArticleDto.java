@@ -4,14 +4,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Article DTO")
@@ -54,11 +59,11 @@ public class ArticleDto {
     description = "Set of theme IDs associated with the article",
     example = "[1, 2, 3]"
   )
-  private Set<Long> themesSet;
+  private Set<Long> themeIds;
 
   @Schema(
     description = "Set of comments IDs associated with the article",
     example = "[11, 22, 33]"
   )
-  private Set<Long> commentsSet;
+  private Set<Long> commentIds;
 }

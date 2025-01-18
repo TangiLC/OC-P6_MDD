@@ -1,7 +1,9 @@
 package com.openclassrooms.mddapi.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -43,9 +46,16 @@ public class Article {
   @JoinColumn(name = "author", referencedColumnName = "id")
   private User author;
 
-  @ManyToMany
+  @OneToMany(
+    mappedBy = "article",
+    cascade = CascadeType.ALL,
+    orphanRemoval = true
+  )
+  private Set<Comment> comments = new HashSet<>();
+
+  @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
-    name = "ARTICLE_RELATIONS",
+    name = "article_themes",
     joinColumns = @JoinColumn(name = "article_id"),
     inverseJoinColumns = @JoinColumn(name = "theme_id")
   )
