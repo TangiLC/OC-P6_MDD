@@ -65,5 +65,5 @@ public class ArticleDto {
     description = "Set of comments IDs associated with the article",
     example = "[11, 22, 33]"
   )
-  private Set<Long> commentIds;
+  private Set<CommentDto> comments;
 }

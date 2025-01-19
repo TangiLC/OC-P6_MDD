@@ -1,6 +1,7 @@
 package com.openclassrooms.mddapi.services;
 
 import com.openclassrooms.mddapi.dto.ArticleDto;
+import com.openclassrooms.mddapi.dto.CommentDto;
 import com.openclassrooms.mddapi.dto.CreateArticleDto;
 import com.openclassrooms.mddapi.models.Article;
 import com.openclassrooms.mddapi.models.Comment;
@@ -14,14 +15,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ArticleService {
 
@@ -108,13 +112,26 @@ public class ArticleService {
     articleRepository.delete(article);
   }
 
-  @Transactional(readOnly = true)
+  @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
   public ArticleDto getArticleById(Long articleId) {
     Article article = articleRepository
       .findArticleById(articleId)
       .orElseThrow(() ->
         new RuntimeException("Article not found with ID: " + articleId)
       );
+    Set<Theme> themes = articleRepository.findThemesByArticleId(articleId);
+    article.setThemes(themes);
+    Set<Comment> comments = articleRepository.findCommentsByArticleId(
+      articleId
+    );
+    article.setComments(comments);
+
+    Long countThemes = articleRepository.debugCountThemesByArticle(articleId);
+
+    log.debug("##########Article loaded: {}", article.getId());
+    log.debug("##########Themes count: {}", article.getThemes().size());
+    log.debug("|||||||||| Debug Themes count: {}", countThemes);
+    log.debug("##########Comments count: {}", article.getComments().size());
 
     return toDto(article);
   }
@@ -151,6 +168,7 @@ public class ArticleService {
 
   @Transactional(readOnly = true)
   public ArticleDto toDto(Article article) {
+    log.debug("**********Converting article {} to DTO", article.getId());
     Set<Long> themeIds = article.getThemes() != null
       ? article
         .getThemes()
@@ -159,11 +177,20 @@ public class ArticleService {
         .collect(Collectors.toSet())
       : new HashSet<>();
 
-    Set<Long> commentIds = article.getComments() != null
+    Set<CommentDto> comments = article.getComments() != null
       ? article
         .getComments()
         .stream()
-        .map(Comment::getId)
+        .map(comment ->
+          CommentDto
+            .builder()
+            .id(comment.getId())
+            .content(comment.getContent())
+            .createdAt(comment.getCreatedAt())
+            .authorUsername(comment.getAuthor().getUsername())
+            .articleId(article.getId())
+            .build()
+        )
         .collect(Collectors.toSet())
       : new HashSet<>();
 
@@ -178,7 +205,7 @@ public class ArticleService {
         article.getAuthor() != null ? article.getAuthor().getUsername() : null
       )
       .themeIds(themeIds)
-      .commentIds(commentIds)
+      .comments(comments)
       .build();
   }
 }

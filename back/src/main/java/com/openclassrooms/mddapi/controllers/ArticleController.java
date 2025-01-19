@@ -103,7 +103,7 @@ public class ArticleController {
       ),
     }
   )
-  @Transactional
+  @Transactional(readOnly=true)
   @GetMapping("/{id}")
   public ResponseEntity<ArticleDto> getById(@PathVariable Long id) {
     ArticleDto article = articleService.getArticleById(id);
