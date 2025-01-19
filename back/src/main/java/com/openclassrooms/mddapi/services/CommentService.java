@@ -109,16 +109,16 @@ public class CommentService {
   }
 
   private CommentDto toDto(Comment comment) {
-    Long currentUserId = getAuthenticatedUser().getId();
+    String currentUsername = getAuthenticatedUser().getUsername();
     return CommentDto
       .builder()
       .id(comment.getId())
       .content(comment.getContent())
       .createdAt(comment.getCreatedAt())
-      .authorId(
+      .authorUsername(
         comment.getAuthor() != null
-          ? comment.getAuthor().getId()
-          : currentUserId
+          ? comment.getAuthor().getUsername()
+          : currentUsername
       )
       .articleId(
         comment.getArticle() != null ? comment.getArticle().getId() : null

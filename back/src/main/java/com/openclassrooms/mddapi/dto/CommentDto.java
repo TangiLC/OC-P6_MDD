@@ -25,8 +25,8 @@ public class CommentDto {
     @Schema(description = "Creation timestamp of the comment", example = "2025-01-01T10:10:00")
     private LocalDateTime createdAt;
 
-    @Schema(description = "ID of the author", example = "1")
-    private Long authorId;
+    @Schema(description = "Username of the author", example = "Bob1")
+    private String authorUsername;
 
     @Schema(description = "Article ID associated with the comment", example = "1")
     private Long articleId;
