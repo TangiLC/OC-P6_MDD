@@ -56,4 +56,15 @@ public class ServicesUtils {
         new RuntimeException("Article not found with ID: " + articleId)
       );
   }
+
+  public void validateAdminUser() {
+    User authenticatedUser = getAuthenticatedUser();
+
+    boolean isAdmin =
+      authenticatedUser.getIsAdmin() != null && authenticatedUser.getIsAdmin();
+
+    if (!isAdmin) {
+      throw new AccessDeniedException("Operation available to admin only");
+    }
+  }
 }
