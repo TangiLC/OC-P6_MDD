@@ -78,11 +78,24 @@ public class ServicesUtils {
       );
   }
 
+
   public Theme validateThemeId(Long themeId) {
     return themeRepository
       .findById(themeId)
       .orElseThrow(() ->
         new RuntimeException("Theme not found with ID: " + themeId)
       );
+  }
+
+  public void validateAdminUser() {
+    User authenticatedUser = getAuthenticatedUser();
+
+    boolean isAdmin =
+      authenticatedUser.getIsAdmin() != null && authenticatedUser.getIsAdmin();
+
+    if (!isAdmin) {
+      throw new AccessDeniedException("Operation available to admin only");
+    }
+
   }
 }
