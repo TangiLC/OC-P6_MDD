@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class ArticleServiceUtils {
+public class ServicesUtils {
 
   private final ArticleRepository articleRepository;
 
-  public ArticleServiceUtils(ArticleRepository articleRepository) {
+  public ServicesUtils(ArticleRepository articleRepository) {
     this.articleRepository = articleRepository;
   }
 

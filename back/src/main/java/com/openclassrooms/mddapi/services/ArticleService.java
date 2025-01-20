@@ -28,7 +28,7 @@ public class ArticleService {
   private final ArticleRepository articleRepository;
   private final ThemeRepository themeRepository;
   private final UserRepository userRepository;
-  private final ArticleServiceUtils utils;
+  private final ServicesUtils utils;
 
   @Transactional
   public ArticleDto createOrUpdateArticle(

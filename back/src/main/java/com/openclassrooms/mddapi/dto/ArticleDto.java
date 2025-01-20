@@ -40,30 +40,18 @@ public class ArticleDto {
   )
   private String content;
 
-  @Schema(
-    description = "Creation timestamp of the article",
-    example = "2025-01-01T10:10:00"
-  )
+  @Schema(description = "Creation timestamp of the article")
   private LocalDateTime createdAt;
 
-  @Schema(
-    description = "Update timestamp of the article",
-    example = "2025-01-01T10:20:00"
-  )
+  @Schema(description = "Update timestamp of the article")
   private LocalDateTime updatedAt;
 
   @Schema(description = "Username of the author", example = "johndoe")
   private String authorUsername;
 
-  @Schema(
-    description = "Set of theme IDs associated with the article",
-    example = "[1, 2, 3]"
-  )
+  @Schema(description = "Set of theme IDs associated with the article")
   private Set<Long> themeIds;
 
-  @Schema(
-    description = "Set of comments IDs associated with the article",
-    example = "[11, 22, 33]"
-  )
+  @Schema(description = "Set of comments IDs associated with the article")
   private Set<CommentDto> comments;
 }
