@@ -1,18 +1,15 @@
 package com.openclassrooms.mddapi.security.utils;
 
 import com.openclassrooms.mddapi.security.UserPrincipal;
-
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +17,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenUtil {
-  private static final Logger logger = LoggerFactory.getLogger(JwtTokenUtil.class);
+
+  private static final Logger logger = LoggerFactory.getLogger(
+    JwtTokenUtil.class
+  );
 
   @Value("${jwt.secretKey}")
   private String secretKey;
@@ -63,11 +63,10 @@ public class JwtTokenUtil {
         .verifyWith(getSigningKey())
         .build()
         .parseSignedClaims(token);
-      
+
       // Si on arrive ici, cela signifie que le token est valide (signature correcte)
       // et n'est pas expiré (sinon une ExpiredJwtException aurait été levée)
       return true;
-      
     } catch (SignatureException e) {
       logger.error("Signature JWT invalide: {}", e.getMessage());
     } catch (MalformedJwtException e) {
@@ -77,7 +76,10 @@ public class JwtTokenUtil {
     } catch (UnsupportedJwtException e) {
       logger.error("Token JWT non supporté: {}", e.getMessage());
     } catch (IllegalArgumentException e) {
-      logger.error("La chaîne de revendications JWT est vide: {}", e.getMessage());
+      logger.error(
+        "La chaîne de revendications JWT est vide: {}",
+        e.getMessage()
+      );
     }
 
     return false;

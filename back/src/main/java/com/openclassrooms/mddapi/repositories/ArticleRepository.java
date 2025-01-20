@@ -1,10 +1,8 @@
 package com.openclassrooms.mddapi.repositories;
 
-import com.openclassrooms.mddapi.dto.ArticleDto;
 import com.openclassrooms.mddapi.models.Article;
 import com.openclassrooms.mddapi.models.Comment;
 import com.openclassrooms.mddapi.models.Theme;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;

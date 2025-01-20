@@ -3,6 +3,7 @@ package com.openclassrooms.mddapi.controllers;
 import static java.time.LocalDateTime.now;
 
 import com.openclassrooms.mddapi.dto.ErrorResponse;
+import com.openclassrooms.mddapi.dto.UpdateUserDto;
 import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.dto.auth.JwtResponse;
 import com.openclassrooms.mddapi.dto.auth.LoginRequest;
@@ -14,19 +15,28 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+/**
+ * Controller for managing user.
+ */
+@Tag(name="1. User")
 @RestController
 @RequestMapping("/api")
 @Validated
@@ -134,5 +144,155 @@ public class UserController {
 
     UserDto userDto = userService.getUserDetails(userPrincipal.getUsername());
     return ResponseEntity.ok(userDto);
+  }
+
+  @Operation(
+    summary = "Update user information",
+    description = "Updates the username, password, and/or picture of a user"
+  )
+  @ApiResponses(
+    value = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "User updated successfully",
+        content = @Content(schema = @Schema(implementation = UserDto.class))
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid input data",
+        content = @Content(
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+      @ApiResponse(
+        responseCode = "403",
+        description = "Access denied - Can only update own profile",
+        content = @Content(
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "User not found",
+        content = @Content(
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+    }
+  )
+  @PutMapping("/user/{id}")
+  public ResponseEntity<?> updateUser(
+    @PathVariable Long id,
+    @RequestBody @Valid UpdateUserDto updateUserDto,
+    @AuthenticationPrincipal UserPrincipal userPrincipal
+  ) {
+    try {
+      JwtResponse updatedUser = userService.updateUser(
+        id,
+        updateUserDto,
+        userPrincipal
+      );
+      return ResponseEntity.ok(updatedUser);
+    } catch (AccessDeniedException e) {
+      return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body(new ErrorResponse(403, e.getMessage(), now().toString()));
+    } catch (Exception e) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body(new ErrorResponse(404, e.getMessage(), now().toString()));
+    }
+  }
+
+  @Operation(
+    summary = "Add theme to user's themes",
+    description = "Adds a theme to the user's set of themes"
+  )
+  @ApiResponses(
+    value = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Theme added successfully",
+        content = @Content(schema = @Schema(implementation = UserDto.class))
+      ),
+      @ApiResponse(
+        responseCode = "403",
+        description = "Access denied",
+        content = @Content(
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "User or theme not found",
+        content = @Content(
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+    }
+  )
+  @PutMapping("/user/add_theme/{id}")
+  public ResponseEntity<?> addThemeToUser(
+    @PathVariable Long id,
+    @AuthenticationPrincipal UserPrincipal userPrincipal
+  ) {
+    try {
+      UserDto updatedUser = userService.addThemeToUser(id, userPrincipal);
+      return ResponseEntity.ok(updatedUser);
+    } catch (AccessDeniedException e) {
+      return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body(new ErrorResponse(403, e.getMessage(), now().toString()));
+    } catch (Exception e) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body(new ErrorResponse(404, e.getMessage(), now().toString()));
+    }
+  }
+
+  @Operation(
+    summary = "Remove theme from user's themes",
+    description = "Removes a theme from the user's set of themes"
+  )
+  @ApiResponses(
+    value = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Theme removed successfully",
+        content = @Content(schema = @Schema(implementation = UserDto.class))
+      ),
+      @ApiResponse(
+        responseCode = "403",
+        description = "Access denied",
+        content = @Content(
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "User or theme not found",
+        content = @Content(
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+    }
+  )
+  @PutMapping("/user/remove_theme/{id}")
+  public ResponseEntity<?> removeThemeFromUser(
+    @PathVariable Long id,
+    @AuthenticationPrincipal UserPrincipal userPrincipal
+  ) {
+    try {
+      UserDto updatedUser = userService.removeThemeFromUser(id, userPrincipal);
+      return ResponseEntity.ok(updatedUser);
+    } catch (AccessDeniedException e) {
+      return ResponseEntity
+        .status(HttpStatus.FORBIDDEN)
+        .body(new ErrorResponse(403, e.getMessage(), now().toString()));
+    } catch (Exception e) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body(new ErrorResponse(404, e.getMessage(), now().toString()));
+    }
   }
 }

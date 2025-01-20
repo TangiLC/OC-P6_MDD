@@ -1,6 +1,5 @@
 package com.openclassrooms.mddapi.security;
 
-import com.openclassrooms.mddapi.exceptions.NotFoundException;
 import com.openclassrooms.mddapi.models.User;
 import com.openclassrooms.mddapi.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +22,9 @@ public class CustomUserDetailsService implements UserDetailsService {
       /*.orElse(
         userRepository
           .findByEmail(username)*/
-          .orElseThrow(() ->
-            new UsernameNotFoundException("Utilisateur non trouvé : " + username)
-          //)
+      .orElseThrow(() ->
+        new UsernameNotFoundException("Utilisateur non trouvé : " + username)
+      //)
       );
 
     return new UserPrincipal(user);

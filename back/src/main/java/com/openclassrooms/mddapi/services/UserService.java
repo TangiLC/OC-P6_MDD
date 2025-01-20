@@ -1,5 +1,7 @@
+// UserService.java
 package com.openclassrooms.mddapi.services;
 
+import com.openclassrooms.mddapi.dto.UpdateUserDto;
 import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.dto.auth.JwtResponse;
 import com.openclassrooms.mddapi.dto.auth.LoginRequest;
@@ -7,14 +9,18 @@ import com.openclassrooms.mddapi.dto.auth.RegisterRequest;
 import com.openclassrooms.mddapi.models.Comment;
 import com.openclassrooms.mddapi.models.Theme;
 import com.openclassrooms.mddapi.models.User;
+import com.openclassrooms.mddapi.repositories.ThemeRepository;
 import com.openclassrooms.mddapi.repositories.UserRepository;
 import com.openclassrooms.mddapi.security.UserPrincipal;
 import com.openclassrooms.mddapi.security.utils.JwtTokenUtil;
 import java.util.List;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,30 +28,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
 
   private final AuthenticationManager authenticationManager;
   private final JwtTokenUtil jwtTokenUtil;
   private final UserRepository userRepository;
+  private final ThemeRepository themeRepository;
   private final PasswordEncoder passwordEncoder;
-
-  public UserService(
-    AuthenticationManager authenticationManager,
-    JwtTokenUtil jwtTokenUtil,
-    UserRepository userRepository,
-    PasswordEncoder passwordEncoder
-  ) {
-    this.authenticationManager = authenticationManager;
-    this.jwtTokenUtil = jwtTokenUtil;
-    this.userRepository = userRepository;
-    this.passwordEncoder = passwordEncoder;
-  }
+  private final ServicesUtils utils;
 
   public JwtResponse authenticateUser(LoginRequest loginRequest) {
     String login = loginRequest.getUserIdentity();
     User user = userRepository
       .findByUsernameOrEmail(login, login)
-      .orElseThrow(() -> new BadCredentialsException("Identifiants incorrects")
+      .orElseThrow(() -> new BadCredentialsException("password not matching user")
       );
 
     Authentication authentication = authenticationManager.authenticate(
@@ -80,11 +77,7 @@ public class UserService {
   }
 
   public UserDto getUserDetails(String username) {
-    User user = userRepository
-      .findByUsername(username)
-      .orElseThrow(() ->
-        new RuntimeException("User not found with username: " + username)
-      );
+    User user = utils.validateUserName(username);
 
     List<Long> themesIds = user.getThemes().stream().map(Theme::getId).toList();
     List<Long> commentsIds;
@@ -98,5 +91,88 @@ public class UserService {
       themesIds,
       commentsIds
     );
+  }
+
+  @Transactional
+  public JwtResponse updateUser(
+    Long id,
+    UpdateUserDto updateUserDto,
+    UserPrincipal userPrincipal
+  ) {
+    User user = utils.validateUserId(id);
+
+    utils.validateAdminOrAuthenticatedUser(user);
+
+    // Mise à jour du username uniquement si présent dans le DTO
+    Optional
+      .ofNullable(updateUserDto.getUsername())
+      .filter(username -> !username.isBlank())
+      .ifPresent(newUsername -> {
+        if (
+          !user.getUsername().equals(newUsername) &&
+          userRepository.existsByUsernameOrEmail(newUsername, "")
+        ) {
+          throw new IllegalArgumentException("Username is already taken");
+        }
+        user.setUsername(newUsername);
+      });
+
+    // Mise à jour du mot de passe uniquement si présent dans le DTO
+    Optional
+      .ofNullable(updateUserDto.getPassword())
+      .filter(password -> !password.isBlank())
+      .map(passwordEncoder::encode)
+      .ifPresent(user::setPassword);
+
+    // Mise à jour de l'image uniquement si présente dans le DTO
+    Optional.ofNullable(updateUserDto.getPicture()).ifPresent(user::setPicture);
+
+    User updatedUser = userRepository.save(user);
+
+    SecurityContextHolder.clearContext();
+
+    // Créer un nouveau UserPrincipal basé sur l'utilisateur mis à jour
+    UserPrincipal newUserPrincipal = new UserPrincipal(updatedUser);
+
+    // Générer un nouveau token
+    String newToken = jwtTokenUtil.generateToken(newUserPrincipal);
+
+    // Retourner la même structure que le login
+    return new JwtResponse(newToken);
+  }
+
+  @Transactional
+  public UserDto addThemeToUser(Long themeId, UserPrincipal userPrincipal) {
+    User user = utils.validateUserName(userPrincipal.getUsername());
+
+    Theme theme = themeRepository
+      .findById(themeId)
+      .orElseThrow(() ->
+        new RuntimeException("Theme not found with id: " + themeId)
+      );
+
+    user.getThemes().add(theme);
+    userRepository.save(user);
+
+    return getUserDetails(user.getUsername());
+  }
+
+  @Transactional
+  public UserDto removeThemeFromUser(
+    Long themeId,
+    UserPrincipal userPrincipal
+  ) {
+    User user = utils.validateUserName(userPrincipal.getUsername());
+
+    Theme theme = themeRepository
+      .findById(themeId)
+      .orElseThrow(() ->
+        new RuntimeException("Theme not found with id: " + themeId)
+      );
+
+    user.getThemes().remove(theme);
+    userRepository.save(user);
+
+    return getUserDetails(user.getUsername());
   }
 }
