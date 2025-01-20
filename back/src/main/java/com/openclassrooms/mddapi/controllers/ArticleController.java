@@ -10,12 +10,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,11 +69,13 @@ public class ArticleController {
   public ResponseEntity<ArticleDto> createArticle(
     @RequestBody @Valid CreateArticleDto createArticleDto
   ) {
-    ArticleDto createdArticle = articleService.createArticle(createArticleDto);
+    ArticleDto createdArticle = articleService.createOrUpdateArticle(
+      null,
+      createArticleDto
+    );
     return ResponseEntity.status(HttpStatus.CREATED).body(createdArticle);
   }
 
- 
   /**
    * Get article by id.
    *
@@ -103,7 +106,7 @@ public class ArticleController {
       ),
     }
   )
-  @Transactional(readOnly=true)
+  @Transactional(readOnly = true)
   @GetMapping("/{id}")
   public ResponseEntity<ArticleDto> getById(@PathVariable Long id) {
     ArticleDto article = articleService.getArticleById(id);
@@ -115,7 +118,7 @@ public class ArticleController {
    *
    * @param themeId the ID of the theme
    * @return a set of articles as ArticleDto objects
-   
+   */
   @Operation(
     summary = "Get articles by theme",
     description = "Retrieves all articles associated with the specified theme."
@@ -142,22 +145,22 @@ public class ArticleController {
       ),
     }
   )
-  @Transactional
+  @Transactional(readOnly = true)
   @GetMapping("/by_theme/{themeId}")
-  public ResponseEntity<List<ArticleDto>> getByTheme(
+  public ResponseEntity<Set<ArticleDto>> getByTheme(
     @PathVariable Long themeId
   ) {
-    List<ArticleDto> articles = articleService.getArticlesByThemeId(themeId);
+    Set<ArticleDto> articles = articleService.getArticlesByThemeId(themeId);
     return ResponseEntity.ok(articles);
-  }*/
+  }
 
   /**
    * Get all articles created by a specific author.
    *
    * @param authorId the ID of the author
    * @return a set of articles as ArticleDto objects
-   
-   @Operation(
+   */
+  @Operation(
     summary = "Get articles by author",
     description = "Retrieves all articles created by the specified author."
   )
@@ -183,20 +186,20 @@ public class ArticleController {
       ),
     }
   )
-  @Transactional
+  @Transactional(readOnly = true)
   @GetMapping("/by_author/{authorId}")
-  public ResponseEntity<List<ArticleDto>> getByAuthor(
+  public ResponseEntity<Set<ArticleDto>> getByAuthor(
     @PathVariable Long authorId
   ) {
-    List<ArticleDto> articles = articleService.getArticlesByAuthor(authorId);
+    Set<ArticleDto> articles = articleService.getArticlesByAuthorId(authorId);
     return ResponseEntity.ok(articles);
-  }*/
+  }
 
   /**
    * Update an article by its ID.
    *
    * @param id              the ID of the article to update
-   * @param updateArticleDto the data transfer object containing updated article details
+   * @param createArticleDto the data transfer object containing updated article details
    * @return the updated article as an ArticleDto
    */
   @Operation(
@@ -243,16 +246,16 @@ public class ArticleController {
   @PutMapping("/{id}")
   public ResponseEntity<ArticleDto> updateArticle(
     @PathVariable Long id,
-    @RequestBody @Valid ArticleDto updateArticleDto
+    @RequestBody @Valid CreateArticleDto updateArticleDto
   ) {
-    ArticleDto updatedArticle = articleService.updateArticle(
+    ArticleDto updatedArticle = articleService.createOrUpdateArticle(
       id,
       updateArticleDto
     );
     return ResponseEntity.ok(updatedArticle);
   }
 
-   /**
+  /**
    * Delete an article by its ID.
    *
    * @param id the ID of the article to delete

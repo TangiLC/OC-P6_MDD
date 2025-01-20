@@ -90,7 +90,7 @@ public class CommentController {
     }
   )
   @PutMapping("comment/{id}")
-  public ResponseEntity<CommentDto> updateComment(
+  public ResponseEntity<String> updateComment(
     @PathVariable Long id,
     @RequestBody @Valid CommentDto updatedCommentDto
   ) {
@@ -98,7 +98,7 @@ public class CommentController {
       id,
       updatedCommentDto
     );
-    return ResponseEntity.ok(updatedComment);
+    return ResponseEntity.ok("content:"+updatedComment.getContent());
   }
 
   @Operation(summary = "Delete a comment by ID")
