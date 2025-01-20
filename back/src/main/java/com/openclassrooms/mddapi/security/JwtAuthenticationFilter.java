@@ -1,7 +1,6 @@
 package com.openclassrooms.mddapi.security;
 
 import com.openclassrooms.mddapi.security.utils.JwtTokenUtil;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
