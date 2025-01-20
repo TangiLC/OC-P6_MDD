@@ -10,7 +10,7 @@
 
 ## 📝 Description
 
-Chatop Rental API est un projet back-end développé en **Java 21** avec le framework **Spring Boot**, dans un cadre pédagogique pour le cursus **Full-Stack Java Angular d'OpenClassrooms**. Il s'agit d'une API REST sécurisée permettant la gestion d'utilisateurs, de thèmes, d'articles, et de commentaires. Ce projet inclut une authentification via JWT (JSON Web Tokens) et le stockage sécurisé des mots de passe via BCrypt.
+MDD Social Network API est un projet back-end développé en **Java 21** avec le framework **Spring Boot**, dans un cadre pédagogique pour le cursus **Full-Stack Java Angular d'OpenClassrooms**. Il s'agit d'une API REST sécurisée permettant la gestion d'utilisateurs, de thèmes, d'articles, et de commentaires. Ce projet inclut une authentification via JWT (JSON Web Tokens) et le stockage sécurisé des mots de passe via BCrypt.
 
 La documentation de l'API est disponible via Swagger et inclut des endpoints sécurisés ainsi que des routes publiques.
 
@@ -69,6 +69,9 @@ mysql -u [username] -p [database_name] < script.sql
    mvn clean spring-boot:run
    ```
 
+
+4. Le serveur par défaut est accessible en `localhost:8080`
+
 ---
 
 ## 🖥️ Front-end associé
@@ -95,6 +98,7 @@ Routes publiques
 - **POST /auth/login** : Authentifie un utilisateur et génère un token JWT.
 
 Routes protégées (nécessitent un token JWT)
+
 **USER**
 - **GET /me** : Récupère les informations de l'utilisateur connecté.
 - **PUT /user/{id}** : Modifie les données de l'utilisateur.
@@ -133,7 +137,7 @@ Routes protégées (nécessitent un token JWT)
 
 ---
 
-### Merci pour votre intérêt ! 😊
+### 🎓 Merci pour votre intérêt ! 😊
 
 
 ### 📚 References

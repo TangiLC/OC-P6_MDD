@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
+import { UnauthGuard } from './guards/unauth.guard';
+
+
 import { HomeComponent } from './pages/home/home.component';
 
 // consider a guard combined with canLoad / canActivate route option
