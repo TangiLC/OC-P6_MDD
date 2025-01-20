@@ -114,88 +114,6 @@ public class ArticleController {
   }
 
   /**
-   * Get all articles associated with a specific theme.
-   *
-   * @param themeId the ID of the theme
-   * @return a set of articles as ArticleDto objects
-   */
-  @Operation(
-    summary = "Get articles by theme",
-    description = "Retrieves all articles associated with the specified theme."
-  )
-  @ApiResponses(
-    {
-      @ApiResponse(
-        responseCode = "200",
-        description = "Articles retrieved successfully",
-        content = @Content(
-          mediaType = "application/json",
-          array = @ArraySchema(
-            schema = @Schema(implementation = ArticleDto.class)
-          )
-        )
-      ),
-      @ApiResponse(
-        responseCode = "404",
-        description = "Theme not found",
-        content = @Content(
-          mediaType = "application/json",
-          schema = @Schema(implementation = ErrorResponse.class)
-        )
-      ),
-    }
-  )
-  @Transactional(readOnly = true)
-  @GetMapping("/by_theme/{themeId}")
-  public ResponseEntity<Set<ArticleDto>> getByTheme(
-    @PathVariable Long themeId
-  ) {
-    Set<ArticleDto> articles = articleService.getArticlesByThemeId(themeId);
-    return ResponseEntity.ok(articles);
-  }
-
-  /**
-   * Get all articles created by a specific author.
-   *
-   * @param authorId the ID of the author
-   * @return a set of articles as ArticleDto objects
-   */
-  @Operation(
-    summary = "Get articles by author",
-    description = "Retrieves all articles created by the specified author."
-  )
-  @ApiResponses(
-    {
-      @ApiResponse(
-        responseCode = "200",
-        description = "Articles retrieved successfully",
-        content = @Content(
-          mediaType = "application/json",
-          array = @ArraySchema(
-            schema = @Schema(implementation = ArticleDto.class)
-          )
-        )
-      ),
-      @ApiResponse(
-        responseCode = "404",
-        description = "Author not found",
-        content = @Content(
-          mediaType = "application/json",
-          schema = @Schema(implementation = ErrorResponse.class)
-        )
-      ),
-    }
-  )
-  @Transactional(readOnly = true)
-  @GetMapping("/by_author/{authorId}")
-  public ResponseEntity<Set<ArticleDto>> getByAuthor(
-    @PathVariable Long authorId
-  ) {
-    Set<ArticleDto> articles = articleService.getArticlesByAuthorId(authorId);
-    return ResponseEntity.ok(articles);
-  }
-
-  /**
    * Update an article by its ID.
    *
    * @param id              the ID of the article to update
@@ -294,5 +212,87 @@ public class ArticleController {
   public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
     articleService.deleteArticle(id);
     return ResponseEntity.noContent().build();
+  }
+
+  /**
+   * Get all articles associated with a specific theme.
+   *
+   * @param themeId the ID of the theme
+   * @return a set of articles as ArticleDto objects
+   */
+  @Operation(
+    summary = "Get articles by theme",
+    description = "Retrieves all articles associated with the specified theme."
+  )
+  @ApiResponses(
+    {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Articles retrieved successfully",
+        content = @Content(
+          mediaType = "application/json",
+          array = @ArraySchema(
+            schema = @Schema(implementation = ArticleDto.class)
+          )
+        )
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "Theme not found",
+        content = @Content(
+          mediaType = "application/json",
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+    }
+  )
+  @Transactional(readOnly = true)
+  @GetMapping("/by_theme/{themeId}")
+  public ResponseEntity<Set<ArticleDto>> getByTheme(
+    @PathVariable Long themeId
+  ) {
+    Set<ArticleDto> articles = articleService.getArticlesByThemeId(themeId);
+    return ResponseEntity.ok(articles);
+  }
+
+  /**
+   * Get all articles created by a specific author.
+   *
+   * @param authorId the ID of the author
+   * @return a set of articles as ArticleDto objects
+   */
+  @Operation(
+    summary = "Get articles by author",
+    description = "Retrieves all articles created by the specified author."
+  )
+  @ApiResponses(
+    {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Articles retrieved successfully",
+        content = @Content(
+          mediaType = "application/json",
+          array = @ArraySchema(
+            schema = @Schema(implementation = ArticleDto.class)
+          )
+        )
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "Author not found",
+        content = @Content(
+          mediaType = "application/json",
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+    }
+  )
+  @Transactional(readOnly = true)
+  @GetMapping("/by_author/{authorId}")
+  public ResponseEntity<Set<ArticleDto>> getByAuthor(
+    @PathVariable Long authorId
+  ) {
+    Set<ArticleDto> articles = articleService.getArticlesByAuthorId(authorId);
+    return ResponseEntity.ok(articles);
   }
 }
