@@ -1,0 +1,56 @@
+.app {
+  .link {
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+  }
+
+  .link + .link {
+    margin-left: 10px;
+  }
+}
+
+mat-toolbar{
+width:100%;
+}
+
+.center {
+  margin:auto;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.mdd-logo{
+  height:3rem;
+  margin:auto;
+  padding-top:.3rem;
+}
+
+.landing-logo{
+  width:60%;
+  margin:auto;
+}
+.button-container{
+  margin:auto;
+  display:flex;
+  flex-direction: row;
+  width:60%;
+  justify-content: space-between;
+  gap:10%;
+}
+
+button{
+  margin:1rem;
+  width:80%;
+}
+
+@media (max-width: 767.98px) {
+  .button-container{
+    flex-direction: column;
+    width:60%;
+    justify-content: space-between;
+  }
+}
+

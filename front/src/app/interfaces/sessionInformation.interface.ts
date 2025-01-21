@@ -1,9 +1,10 @@
+
 export interface SessionInformation {
   token: string;
+  type: string;
   id: number;
   username: string;
-  email: string;
-  isAdmin: boolean;
-  themes: number[];
-  comments: number[];
+  firstName: string;
+  lastName: string;
+  admin: boolean;
 }
