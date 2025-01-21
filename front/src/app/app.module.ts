@@ -14,6 +14,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { AuthModule } from './pages/auth/auth.module';
 
 const materialModule = [
   MatButtonModule,
@@ -30,11 +31,12 @@ const materialModule = [
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    AuthModule,
     ...materialModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
-  //bootstrap: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

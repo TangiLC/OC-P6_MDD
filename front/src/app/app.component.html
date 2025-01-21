@@ -1,23 +1,6 @@
 <div class="app">
 
-  <div *ngIf="$isLogged() | async; else notLogged">
-    <mat-toolbar >
-      <span><img src="/assets/logo_p6.png" alt="logo" class="mdd-logo"/></span>
-      <span routerLink="articles" class="link">Articles</span>
-      <span routerLink="themes" class="link">Thèmes</span>
-      <span routerLink="me" class="link">Account</span>
-    </mat-toolbar>
-  </div>
-  <ng-template #notLogged>
-    <div class="center">
-      <img src="/assets/logo_p6.png" alt="logo" class="landing-logo"/>
-      <h1>Welcome to MDD</h1>
-      <div class="button-container">
-        <button mat-raised-button color="primary">Se connecter</button>
-        <button mat-raised-button color="primary">S'inscrire</button>
-      </div>
-    </div>
-  </ng-template>
+  <app-navbar></app-navbar>
 
   <div>
     <router-outlet></router-outlet>

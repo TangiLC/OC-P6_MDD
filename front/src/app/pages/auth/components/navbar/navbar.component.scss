@@ -1,0 +1,47 @@
+mat-toolbar {
+  width: 100%;
+  border-bottom: 1px solid #bcbcbc;
+}
+
+a:link,
+a:visited,
+a {
+  margin: 0.2rem 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #9c27b0;
+}
+
+a.active-route {
+  text-decoration: none;
+  color: #6a1b9a;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.navbar-logo {
+  height: 3rem;
+  margin: auto;
+  padding-top: 0.3rem;
+}
+
+.profile-picture {
+  height: 1.8rem;
+  width: 1.8rem;
+  border-radius: 50%;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #bcbcbc;
+  padding: 0.2rem;
+}
+
+a.active-route>.profile-picture {
+  border-color: #6a1b9a;
+  border-width: 3px;
+}

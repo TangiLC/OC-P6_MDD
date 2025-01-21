@@ -1,0 +1,16 @@
+<mat-toolbar>
+
+  <span><img class="navbar-logo" src="/assets/logo_p6.png" alt="logo" /></span>
+
+
+  <span class="spacer"></span>
+  <!--<ng-container *ngIf="isAuthenticated">-->
+
+  <a mat-button routerLink="/articles" [ngClass]="{'active-route': currentUrl==='/articles'}">Articles</a>
+  <a mat-button routerLink="/themes" [ngClass]="{'active-route': currentUrl==='/themes'}">Thèmes</a>
+  <a mat-button routerLink="/profil" [ngClass]="{'active-route': currentUrl==='/profil'}">
+    <img [src]="userPicture$ | async" alt="Profile picture" class="profile-picture" />
+  </a>
+
+  <!--</ng-container>-->
+</mat-toolbar>
