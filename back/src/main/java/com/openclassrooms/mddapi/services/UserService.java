@@ -88,6 +88,7 @@ public class UserService {
       user.getEmail(),
       user.getUsername(),
       user.getPicture(),
+      user.getIsAdmin(),
       themesIds,
       commentsIds
     );
