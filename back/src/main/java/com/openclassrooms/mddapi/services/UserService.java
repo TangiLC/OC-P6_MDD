@@ -42,7 +42,8 @@ public class UserService {
     String login = loginRequest.getUserIdentity();
     User user = userRepository
       .findByUsernameOrEmail(login, login)
-      .orElseThrow(() -> new BadCredentialsException("password not matching user")
+      .orElseThrow(() ->
+        new BadCredentialsException("password not matching user")
       );
 
     Authentication authentication = authenticationManager.authenticate(
@@ -87,6 +88,7 @@ public class UserService {
       user.getId(),
       user.getEmail(),
       user.getUsername(),
+      user.getIsAdmin(),
       user.getPicture(),
       themesIds,
       commentsIds
