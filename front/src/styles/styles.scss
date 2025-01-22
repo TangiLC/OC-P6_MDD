@@ -4,29 +4,11 @@
 // Include the core styles for Angular Material.
 @include mat.core();
 
-// Define color palettes for the theme
-$front-primary: mat.define-palette(mat.$indigo-palette);
-$front-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$front-warn: mat.define-palette(mat.$red-palette);
 
-// Create a light theme
-$front-theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $front-primary,
-      accent: $front-accent,
-      warn: $front-warn,
-    ),
-  )
-);
-
-// Include all component styles for the theme
-@include mat.all-component-themes($front-theme);
-
-// Define a custom theme
-$custom-primary: mat.define-palette(mat.$deep-purple-palette, 400, 100, 900);
-$custom-accent: mat.define-palette(mat.$indigo-palette, A200);
-$custom-warn: mat.define-palette(mat.$red-palette, 700);
+/*// Define a custom theme
+$custom-primary: mat.define-palette(mat.$deep-purple-palette);
+$custom-accent: mat.define-palette(mat.$indigo-palette);
+$custom-warn: mat.define-palette(mat.$red-palette);
 
 $custom-theme: mat.define-light-theme(
   (
@@ -39,7 +21,7 @@ $custom-theme: mat.define-light-theme(
 );
 
 // Include all component styles for the custom theme
-@include mat.all-component-themes($custom-theme);
+@include mat.all-component-themes($custom-theme);*/
 
 // Global styles
 //html,
@@ -59,3 +41,6 @@ app-root {
   max-width:1400px;
 }
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

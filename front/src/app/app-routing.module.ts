@@ -10,12 +10,12 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
-  /*{
+  {
     path: 'home',
     loadChildren: () =>
       import('./pages/auth/components/home/home.module').then((m) => m.HomeModule),
     canActivate: [UnauthGuard],
-  },*/
+  },
   {
     path: 'auth',
     loadChildren: () =>

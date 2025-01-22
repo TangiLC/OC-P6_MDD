@@ -12,11 +12,12 @@ import { NavigationEnd, Router } from '@angular/router';
 export class NavbarComponent implements OnInit {
   isAuthenticated = false;
   currentUrl: string = '';
+  isMenuOpen = false;
 
   userPicture$ = this.authService.userInfo$.pipe(
     map(
       (userInfo) =>
-        //`${environment.apiBaseUrl}/assets/${userInfo?.picture}.png` ||
+        `${environment.apiBaseUrl}/assets/${userInfo?.picture}.png` ||
         'assets/default-avatar.png'
     )
   );
@@ -31,7 +32,11 @@ export class NavbarComponent implements OnInit {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.currentUrl = event.url;
+        this.isMenuOpen = false;
       }
     });
+  }
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }
