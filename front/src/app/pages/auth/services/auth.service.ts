@@ -5,24 +5,40 @@ import { LoginRequest } from '../interfaces/loginRequest.interface';
 import { RegisterRequest } from '../interfaces/registerRequest.interface';
 import { UserInformation } from 'src/app/interfaces/userInformation.interface';
 import { LoginResponse } from '../interfaces/loginResponse.interface';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private pathService = 'api/auth';
+  private pathService = environment.apiBaseUrl + 'api/auth';
   private tokenKey = 'authToken';
 
   private tokenSubject = new BehaviorSubject<string | null>(this.getToken());
-  private isAuthSubject = new BehaviorSubject<boolean>(this.hasToken())
-  public token$ = this.tokenSubject.asObservable();
-
+  private isAuthSubject = new BehaviorSubject<boolean>(this.hasToken());
   private userInfoSubject = new BehaviorSubject<UserInformation | null>(null);
-  public userInfo$ = this.userInfoSubject.asObservable();
+
+  public token$ = this.tokenSubject.asObservable();
   public isAuthenticated$ = this.isAuthSubject.asObservable();
+  public userInfo$ = this.userInfoSubject.asObservable();
 
+  constructor(private httpClient: HttpClient) {
+    if (this.hasToken()) {
+      this.loadUserInfo();
+    }
+  }
 
-  constructor(private httpClient: HttpClient) {}
+  private loadUserInfo(): void {
+    this.getUserInfo().subscribe({
+      next: (userInfo) => {
+        this.userInfoSubject.next(userInfo);
+        console.log('USER INFO :',userInfo)
+      },
+      /*error: () => {
+        this.removeToken();
+      },*/
+    });
+  }
 
   public register(registerRequest: RegisterRequest): Observable<void> {
     return this.httpClient.post<void>(
@@ -42,6 +58,7 @@ export class AuthService {
         }),
         switchMap(() => this.getUserInfo()),
         tap((userInfo: UserInformation) => {
+          console.log('USER INFO :',userInfo);
           this.userInfoSubject.next(userInfo);
         })
       );
@@ -53,9 +70,12 @@ export class AuthService {
       throw new Error('No token found');
     }
 
-    return this.httpClient.get<UserInformation>(`${this.pathService}/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    return this.httpClient.get<UserInformation>(
+      `${environment.apiBaseUrl}api/me`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
   }
 
   private saveToken(token: string): void {
@@ -65,6 +85,7 @@ export class AuthService {
   }
 
   public getToken(): string | null {
+    console.log('GET TOKEN', localStorage.getItem(this.tokenKey));
     return localStorage.getItem(this.tokenKey);
   }
 

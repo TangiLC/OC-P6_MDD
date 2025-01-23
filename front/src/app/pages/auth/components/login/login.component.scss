@@ -1,8 +1,36 @@
-.login {
-    margin-top: 30px;
-    mat-card {
-        margin: 20px;
-        max-width: 600px;
-        width: 100%;
-    }
+.login-card {
+  max-width: 400px;
+  margin: 2em auto;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-form-field {
+  margin-bottom: 1em;
+}
+
+button {
+  margin-top: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-error {
+  color: red;
+  margin-bottom: 1em;
+}
+
+button mat-icon {
+  margin-right: 0.5em;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }

@@ -8,7 +8,11 @@ const routes: Routes = [
   {
     path: '',
     children: [
-      //{ path: 'login', component: LoginComponent },
+      {
+        path: 'login',
+        loadChildren: () =>
+          import('./components/login/login.module').then((m) => m.LoginModule),
+      },
       //{ path: 'register', component: RegisterComponent },
     ],
     canActivate: [UnauthGuard],

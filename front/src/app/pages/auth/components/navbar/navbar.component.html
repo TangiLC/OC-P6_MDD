@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar *ngIf="!isNavbarHidden">
 
   <span><img class="navbar-logo" src="/assets/logo_p6.png" alt="logo" /></span>
 
@@ -15,6 +15,7 @@
       <a mat-button routerLink="/themes" [ngClass]="{'active-route': currentUrl==='/themes'}">Thèmes</a>
     </div>
     <div class="nav-items-bottom">
+
       <a mat-button routerLink="/profil" [ngClass]="{'active-route': currentUrl==='/profil'}">
         <img [src]="userPicture$ | async" alt="Profile picture" class="profile-picture" />
       </a>
