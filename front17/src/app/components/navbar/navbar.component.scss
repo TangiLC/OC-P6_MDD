@@ -1,8 +1,15 @@
-mat-toolbar {
+.navbar {
   width: 100%;
   border-bottom: 1px solid #bcbcbc;
-  position:absolute;
-  top:0;
+  position: absolute;
+  top: 0;
+}
+
+.nobar {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  margin: auto;
 }
 
 a:link,
@@ -34,6 +41,14 @@ a.active-route {
   height: 3rem;
   margin: auto;
   padding-top: 0.3rem;
+}
+
+.big-logo {
+  width: 80%;
+  margin: auto;
+  //padding-top: 0.3rem;
+  display: flex;
+  align-items: center;
 }
 
 .profile-picture {

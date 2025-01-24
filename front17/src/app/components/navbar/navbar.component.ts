@@ -34,6 +34,7 @@ export class NavbarComponent implements OnInit {
   currentUrl: string = '';
   isMenuOpen = false;
   isNavbarHidden = true;
+  isHomePage = true;
   userPicture$: Observable<string> = this.authService.userInfo$.pipe(
     map((userInfo) =>
       userInfo?.picture
@@ -70,18 +71,32 @@ export class NavbarComponent implements OnInit {
     const screenWidth = window.innerWidth;
 
     if (this.currentUrl === '/home' || this.currentUrl === '/') {
-      this.isNavbarHidden = true;
-    } else if (
-      (this.currentUrl === '/login' || this.currentUrl === '/register') &&
+      this.isHomePage = true;
+    } else this.isHomePage = false;
+
+    if (
+      (this.currentUrl === '/auth/login' ||
+        this.currentUrl === '/auth/register') &&
       screenWidth < 758
     ) {
       this.isNavbarHidden = true;
     } else {
       this.isNavbarHidden = false;
     }
+    console.log(
+      'UPDATE NAVBAR',
+      screenWidth,
+      this.currentUrl,
+      this.isNavbarHidden
+    );
   }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  navigateTo(route: string) {
+    this.router.navigate([route]);
+    console.log(route, ' CLICKED');
   }
 }

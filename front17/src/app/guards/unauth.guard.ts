@@ -20,6 +20,7 @@ export class UnauthGuard implements CanActivate {
           return false;
         }
         return true;
+        //return isAuthenticated;
       })
     );
   }

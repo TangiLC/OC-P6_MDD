@@ -1,0 +1,18 @@
+.arrow {
+  position: absolute;
+  top: 4rem;
+  left: 2rem;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: larger;
+}
+
+@media screen and (max-width: 758px) {
+  .arrow {
+    top:.5rem;
+  }
+}

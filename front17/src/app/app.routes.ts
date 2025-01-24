@@ -11,19 +11,24 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
+    loadComponent: () =>
+      import('./pages/home/home.component').then((m) => m.HomeComponent),
     canActivate: [UnauthGuard],
   },
   {
     path: 'auth',
-    loadChildren: () => import('./pages/auth/auth.routes').then(m => m.routes),
+    loadChildren: () =>
+      import('./pages/auth/auth.routes').then((m) => m.routes),
     canActivate: [UnauthGuard],
   },
-  /*{
-    path: 'me',
-    loadChildren: () => import('./pages/me/me.module').then((m) => m.MeModule),
+  {
+    path: 'profil',
+    loadComponent: () =>
+      import('./pages/user-profile/user-profile.component').then(
+        (m) => m.UserProfile
+      ),
     canActivate: [AuthGuard],
-  },*/
+  },
   /*{
     path: 'articles',
     loadChildren: () =>

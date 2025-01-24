@@ -1,0 +1,35 @@
+.user-profile-card {
+  max-width: 500px;
+  margin: 2rem auto;
+  text-align: center;
+  align-items: center;
+}
+
+mat-card-title {
+  margin: 1rem;
+}
+
+mat-card-content {
+  width:80%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+button {
+  margin: auto;
+  width: 60%;
+}
+
+.logout-link{
+  margin-top:.5rem;
+  text-decoration: none;
+  color:firebrick;
+}

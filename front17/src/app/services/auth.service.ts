@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { UserService } from './user.service';
 import { environment } from '../../environments/environment';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -18,14 +19,15 @@ export class AuthService {
   private tokenSubject = new BehaviorSubject<string | null>(this.getToken());
   private isAuthSubject = new BehaviorSubject<boolean>(this.hasToken());
   private userInfoSubject = new BehaviorSubject<UserInformation | null>(null);
-  
+
   public token$ = this.tokenSubject.asObservable();
   public isAuthenticated$ = this.isAuthSubject.asObservable();
   public userInfo$ = this.userInfoSubject.asObservable();
 
   constructor(
     private httpClient: HttpClient,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {
     if (this.hasToken()) {
       this.loadUserInfo();
@@ -86,5 +88,12 @@ export class AuthService {
 
   public hasToken(): boolean {
     return !!this.getToken();
+  }
+
+  public logout(): void {
+    this.removeToken();
+    this.userInfoSubject.next(null);
+    this.router.navigate(['/home']);
+    console.log('User has been logged out');
   }
 }
