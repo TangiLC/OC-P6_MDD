@@ -2,6 +2,9 @@ package com.openclassrooms.mddapi.controllers;
 
 import static java.time.LocalDateTime.now;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.openclassrooms.mddapi.dto.ErrorResponse;
 import com.openclassrooms.mddapi.dto.UpdateUserDto;
 import com.openclassrooms.mddapi.dto.UserDto;
@@ -109,9 +112,13 @@ public class UserController {
   ) {
     try {
       userService.registerUser(registerRequest);
-      return ResponseEntity.ok("User registered successfully!");
+      Map<String, String> response = new HashMap<>();
+      response.put("message", "User registered successfully!");
+      return ResponseEntity.ok(response);
     } catch (IllegalArgumentException e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
+      Map<String, String> errorResponse = new HashMap<>();
+      errorResponse.put("message", e.getMessage());
+      return ResponseEntity.badRequest().body(errorResponse);
     }
   }
 

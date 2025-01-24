@@ -46,10 +46,13 @@ export class AuthService {
     });
   }
 
-  public register(registerRequest: RegisterRequest): Observable<void> {
-    return this.httpClient.post<void>(
-      `${this.pathService}/register`,
-      registerRequest
+  public register(registerRequest: RegisterRequest): Observable<any> {
+    return this.httpClient.post(`${this.pathService}/register`, registerRequest).pipe(
+      tap((response: any) => {
+        if (response.statusCode && response.statusCode !== 200) {
+          throw new Error(response.message || 'Erreur lors de l\'inscription');
+        }
+      })
     );
   }
 
