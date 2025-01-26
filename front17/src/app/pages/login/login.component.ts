@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BackArrowComponent } from '../../components/navbar/back-arrow/back-arrow.component';
+import { BackArrowComponent } from '../../components/back-arrow/back-arrow.component';
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../interfaces/loginRequest.interface';
 import { catchError } from 'rxjs/operators';

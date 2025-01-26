@@ -152,6 +152,7 @@ public class ArticleService {
             .content(comment.getContent())
             .createdAt(comment.getCreatedAt())
             .authorUsername(comment.getAuthor().getUsername())
+            .authorPicture(comment.getAuthor().getPicture())
             .articleId(article.getId())
             .build()
         )

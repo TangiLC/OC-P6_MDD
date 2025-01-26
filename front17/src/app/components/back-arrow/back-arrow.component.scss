@@ -1,7 +1,8 @@
 .arrow {
   position: absolute;
   top: 4rem;
-  left: 2rem;
+  left:5%;
+  transform: translate(-50%, 0%);
 }
 
 button {
@@ -12,7 +13,5 @@ button {
 }
 
 @media screen and (max-width: 758px) {
-  .arrow {
-    top:.5rem;
-  }
+ 
 }

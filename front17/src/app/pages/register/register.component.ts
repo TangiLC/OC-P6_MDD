@@ -15,7 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-import { BackArrowComponent } from '../../components/navbar/back-arrow/back-arrow.component';
+import { BackArrowComponent } from '../../components/back-arrow/back-arrow.component';
 import { AuthService } from '../../services/auth.service';
 import { RegisterRequest } from '../../interfaces/registerRequest.interface';
 import { catchError, EMPTY } from 'rxjs';

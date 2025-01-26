@@ -1,0 +1,18 @@
+<mat-card class="article-detail">
+  <mat-card-title>{{ article?.title }}</mat-card-title>
+  <mat-card-subtitle>
+    <div class="metadata">
+      <span><mat-icon fontIcon="calendar_today"></mat-icon>
+        {{ article?.createdAt | date:'mediumDate' }}</span>
+      <span class="author"> <mat-icon fontIcon="person"></mat-icon>
+        {{ article?.authorUsername }}</span>
+      <!--<span *ngIf="article?.themeIds.length > 0"> Thème: {{ article?.themeIds.join(', ') }}</span>-->
+    </div>
+  </mat-card-subtitle>
+
+  <mat-divider></mat-divider>
+
+  <mat-card-content>
+    <p>{{ article?.content }}</p>
+  </mat-card-content>
+</mat-card>

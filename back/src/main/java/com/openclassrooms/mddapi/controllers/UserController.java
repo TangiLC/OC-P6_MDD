@@ -2,11 +2,9 @@ package com.openclassrooms.mddapi.controllers;
 
 import static java.time.LocalDateTime.now;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.openclassrooms.mddapi.dto.ErrorResponse;
 import com.openclassrooms.mddapi.dto.UpdateUserDto;
+import com.openclassrooms.mddapi.dto.UserAbstractDto;
 import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.dto.auth.JwtResponse;
 import com.openclassrooms.mddapi.dto.auth.LoginRequest;
@@ -20,6 +18,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -35,11 +35,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 /**
  * Controller for managing user.
  */
-@Tag(name="1. User")
+@Tag(name = "1. User")
 @RestController
 @RequestMapping("/api")
 @Validated
@@ -151,6 +150,44 @@ public class UserController {
 
     UserDto userDto = userService.getUserDetails(userPrincipal.getUsername());
     return ResponseEntity.ok(userDto);
+  }
+
+  /**
+   * Retrieve specific user's information by ID.
+   *
+   * @param id the ID of the user to retrieve information for
+   * @return ResponseEntity containing user's username and picture
+   */
+  @Operation(
+    summary = "Retrieve summary of user information by username",
+    description = "Fetches summary a user by their username."
+  )
+  @ApiResponses(
+    value = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "User information retrieved successfully",
+        content = @Content(schema = @Schema(implementation = UserAbstractDto.class))
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "User not found",
+        content = @Content(
+          schema = @Schema(implementation = ErrorResponse.class)
+        )
+      ),
+    }
+  )
+  @GetMapping("/user/{username}")
+  public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
+    try {
+      UserAbstractDto userDetails = userService.getUserDetailsFromUsername(username);
+      return ResponseEntity.ok(userDetails);
+    } catch (Exception e) {
+      return ResponseEntity
+        .status(HttpStatus.NOT_FOUND)
+        .body(new ErrorResponse(404, e.getMessage(), now().toString()));
+    }
   }
 
   @Operation(

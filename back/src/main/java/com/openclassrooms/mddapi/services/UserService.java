@@ -2,6 +2,7 @@
 package com.openclassrooms.mddapi.services;
 
 import com.openclassrooms.mddapi.dto.UpdateUserDto;
+import com.openclassrooms.mddapi.dto.UserAbstractDto;
 import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.dto.auth.JwtResponse;
 import com.openclassrooms.mddapi.dto.auth.LoginRequest;
@@ -13,6 +14,7 @@ import com.openclassrooms.mddapi.repositories.ThemeRepository;
 import com.openclassrooms.mddapi.repositories.UserRepository;
 import com.openclassrooms.mddapi.security.UserPrincipal;
 import com.openclassrooms.mddapi.security.utils.JwtTokenUtil;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +44,8 @@ public class UserService {
     String login = loginRequest.getUserIdentity();
     User user = userRepository
       .findByUsernameOrEmail(login, login)
-      .orElseThrow(() -> new BadCredentialsException("password not matching user")
+      .orElseThrow(() ->
+        new BadCredentialsException("password not matching user")
       );
 
     Authentication authentication = authenticationManager.authenticate(
@@ -92,6 +95,28 @@ public class UserService {
       themesIds,
       commentsIds
     );
+  }
+
+  /**
+   * Fetch user details (username and picture) by user ID.
+   *
+   * @param id the ID of the user to retrieve
+   * @return a Map containing username and picture of the user
+   * @throws IllegalArgumentException if the user does not exist
+   */
+  public UserAbstractDto getUserDetailsFromUsername(String username) {
+    User user = userRepository
+      .findByUsername(username)
+      .orElseThrow(() ->
+        new IllegalArgumentException("User not found with username: " + username)
+      );
+    return UserAbstractDto
+      .builder()
+      .id(user.getId())
+      .email(user.getEmail())
+      .username(user.getUsername())
+      .picture(user.getPicture())
+      .build();
   }
 
   @Transactional

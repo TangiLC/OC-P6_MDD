@@ -1,6 +1,6 @@
 <div *ngIf="isNavbarHidden&&!isHomePage" class="nobar">
   <span><img class="big-logo" src="/assets/logo_p6.png" alt="bigLogo" /></span>
-  <div class="overlay" [class.overlay-visible]="isMenuOpen" (click)="toggleMenu()"></div>
+  
 </div>
 
 
@@ -28,4 +28,5 @@
     </div>
 
   </ng-container>
+  <div class="overlay" [class.overlay-visible]="isMenuOpen" (click)="toggleMenu()"></div>
 </mat-toolbar>

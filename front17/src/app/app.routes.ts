@@ -29,6 +29,14 @@ export const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'article/:id',
+    loadComponent: () =>
+      import('./pages/article/article.component').then(
+        (m) => m.ArticleComponent
+      ),
+    canActivate: [AuthGuard],
+  },
   /*{
     path: 'articles',
     loadChildren: () =>
