@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { CreateComment } from '../interfaces/createComment.interface';
+import { CommentDto } from '../interfaces/commentDto.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -11,11 +13,10 @@ export class CommentService {
 
   constructor(private httpClient: HttpClient) {}
 
-  getPictureFromUsername(username: string): Observable<string> {
-    return this.httpClient
-      .get<{ id: number; email: string; username: string; picture: string }>(
-        `${this.userApiUrl}user/${username}`
-      )
-      .pipe(map((user) => user.picture));
+  createComment(createCommentDto: CreateComment): Observable<CommentDto> {
+    return this.httpClient.post<CommentDto>(
+      this.userApiUrl + 'comment',
+      createCommentDto
+    );
   }
 }

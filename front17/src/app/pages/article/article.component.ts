@@ -21,7 +21,7 @@ import { CreateCommentComponent } from '../../components/create-comment/create-c
     ArticleDetailComponent,
     CommentDetailComponent,
     BackArrowComponent,
-    CreateCommentComponent
+    CreateCommentComponent,
   ],
 })
 export class ArticleComponent implements OnInit {
@@ -37,7 +37,22 @@ export class ArticleComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.article$ = this.articleService.getArticleById(+id);
-      console.log("ARTICLE",this.article$)
+
+      this.article$.subscribe((data) => {
+        this.article = data;
+        console.log('ARTICLE',this.article);
+        this.article?.comments.sort((a, b) => {
+          const dateA = new Date(a.createdAt.replace(' ', 'T')).getTime();
+          const dateB = new Date(b.createdAt.replace(' ', 'T')).getTime();
+          return dateB - dateA; 
+        });
+      });
+    }
+  }
+
+  refreshArticle(): void {
+    if (this.article?.id) {
+      this.article$ = this.articleService.getArticleById(this.article.id);
       this.article$.subscribe((data) => (this.article = data));
     }
   }

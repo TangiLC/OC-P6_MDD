@@ -4,9 +4,17 @@
     <div class="metadata">
       <span><mat-icon fontIcon="calendar_today"></mat-icon>
         {{ article?.createdAt | date:'mediumDate' }}</span>
-      <span class="author"> <mat-icon fontIcon="person"></mat-icon>
-        {{ article?.authorUsername }}</span>
-      <!--<span *ngIf="article?.themeIds.length > 0"> Thème: {{ article?.themeIds.join(', ') }}</span>-->
+      <span><img [src]="'/assets/profils/'+article?.authorPicture+'.png'" [alt]="article?.authorUsername"
+          class="author-picture" onerror="this.src='/assets/profils/default.png'" /></span>
+      <span class="author">{{ article?.authorUsername }}</span>
+
+      <span>
+        Thèmes :
+        <span *ngIf="getThemeNames().length; else noThemes">
+          {{ getThemeNames().join(', ') }}
+        </span>
+        <ng-template #noThemes>Non défini</ng-template>
+      </span>
     </div>
   </mat-card-subtitle>
 

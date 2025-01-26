@@ -169,6 +169,9 @@ public class ArticleService {
       .authorUsername(
         article.getAuthor() != null ? article.getAuthor().getUsername() : null
       )
+      .authorPicture(
+        article.getAuthor() != null ? article.getAuthor().getPicture() : null
+      )
       .themeIds(themeIds)
       .comments(comments)
       .build();

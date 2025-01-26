@@ -19,7 +19,22 @@ export class ArticleDetailComponent {
     createdAt: string;
     updatedAt: string;
     authorUsername: string;
+    authorPicture:string;
     themeIds: number[];
   } | null = null;
   
+
+  themes: { [key: number]: string } = {
+    1: 'Angular',
+    2: 'BDD',
+    3: 'Spring',
+    4: 'Tests',
+    5: 'UX/UI',
+    6: 'Style'
+  };
+  
+  getThemeNames(): string[] {
+    if (!this.article?.themeIds) return [];
+    return this.article.themeIds.map(id => this.themes[id] || 'Inconnu');
+  }
 }

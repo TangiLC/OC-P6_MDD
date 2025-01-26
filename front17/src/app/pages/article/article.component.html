@@ -12,7 +12,7 @@
     </div>
 
 
-    <app-create-comment [articleId]="article.id"></app-create-comment>
+    <app-create-comment [articleId]="article.id" (commentCreated)="refreshArticle()"></app-create-comment>
   </div>
 
 

@@ -5,13 +5,14 @@ export interface Article {
   createdAt: string;
   updatedAt: string;
   authorUsername: string;
+  authorPicture: string;
   themeIds: number[];
   comments: {
     id: number;
     content: string;
     createdAt: string;
     authorUsername: string;
-    authorPicture:string;
+    authorPicture: string;
     articleId: number;
   }[];
 }
