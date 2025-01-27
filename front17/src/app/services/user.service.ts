@@ -16,7 +16,6 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) {}
 
-  
   getUserInfo(): Observable<UserInformation> {
     return this.httpClient.get<UserInformation>(this.meService);
   }

@@ -1,6 +1,7 @@
 package com.openclassrooms.mddapi.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +18,10 @@ public class UpdateUserDto {
     @Schema(description = "username", example = "myAlias1|null")
     private String username;
 
-    @Size(min = 6, max = 40)
-    @Schema(description = "password", example = "newPassword123|null")
-    private String password;
+    @Email
+    @Size(max = 50)
+    @Schema(description = "email", example = "user@example.com|null")
+    private String email;
 
     @Size(max = 36)
     @Schema(description = "picture uuid", example = "90ac3cab|null")

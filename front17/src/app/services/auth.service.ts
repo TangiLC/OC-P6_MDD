@@ -47,13 +47,15 @@ export class AuthService {
   }
 
   public register(registerRequest: RegisterRequest): Observable<any> {
-    return this.httpClient.post(`${this.pathService}/register`, registerRequest).pipe(
-      tap((response: any) => {
-        if (response.statusCode && response.statusCode !== 200) {
-          throw new Error(response.message || 'Erreur lors de l\'inscription');
-        }
-      })
-    );
+    return this.httpClient
+      .post(`${this.pathService}/register`, registerRequest)
+      .pipe(
+        tap((response: any) => {
+          if (response.statusCode && response.statusCode !== 200) {
+            throw new Error(response.message || "Erreur lors de l'inscription");
+          }
+        })
+      );
   }
 
   public login(loginRequest: LoginRequest): Observable<UserInformation> {
@@ -91,6 +93,10 @@ export class AuthService {
 
   public hasToken(): boolean {
     return !!this.getToken();
+  }
+
+  public setUserInfo(userInfo: UserInformation | null): void {
+    this.userInfoSubject.next(userInfo);
   }
 
   public logout(): void {

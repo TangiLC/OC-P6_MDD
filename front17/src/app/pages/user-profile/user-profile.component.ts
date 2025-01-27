@@ -14,10 +14,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { UserInformation } from '../../interfaces/userInformation.interface';
 import { UpdateUserDto } from '../../interfaces/updateUserDto.interface';
+import { combineLatest, map, Observable, tap } from 'rxjs';
+import { Theme } from '../../interfaces/theme.interface';
+import { ThemesService } from '../../services/theme.service';
+import { ThemeDetailComponent } from '../../components/theme-detail/theme-detail.component';
 
 export function notBlankValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -27,7 +32,6 @@ export function notBlankValidator(): ValidatorFn {
     return isValid ? null : { blank: { value: value } };
   };
 }
-
 @Component({
   selector: 'app-user-profile',
   standalone: true,
@@ -40,6 +44,7 @@ export function notBlankValidator(): ValidatorFn {
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
+    ThemeDetailComponent,
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
@@ -47,12 +52,23 @@ export function notBlankValidator(): ValidatorFn {
 export class UserProfile implements OnInit {
   userInfo: UserInformation | null = null;
   profileForm: FormGroup;
-  hidePassword = true;
+  followedThemes$: Observable<Theme[]> = combineLatest([
+    this.themesService.themes$,
+    this.authService.userInfo$,
+  ]).pipe(
+    map(([themes, userInfo]) => {
+      return userInfo
+        ? themes.filter((theme) => userInfo.themesSet.includes(theme.id))
+        : [];
+    })
+  );
 
   constructor(
     private userService: UserService,
     public authService: AuthService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private themesService: ThemesService,
+    private snackBar: MatSnackBar
   ) {
     this.profileForm = this.fb.group({
       username: [
@@ -64,30 +80,28 @@ export class UserProfile implements OnInit {
           Validators.maxLength(30),
         ],
       ],
-      password: [
+      email: [
         '',
         [
-          Validators.minLength(6),
-          Validators.maxLength(40),
-          (control: AbstractControl) => (control.value ? null : null),
+          Validators.required,
+          Validators.email,
+          notBlankValidator(),
+          Validators.maxLength(50),
         ],
       ],
     });
   }
 
   ngOnInit(): void {
-    this.authService.userInfo$.subscribe((info) => {
-      this.userInfo = info;
-      if (info) {
+    this.authService.userInfo$.subscribe((userInfo) => {
+      if (userInfo) {
+        this.userInfo = userInfo;
         this.profileForm.patchValue({
-          username: info.username,
+          username: userInfo.username,
+          email: userInfo.email,
         });
       }
     });
-  }
-
-  togglePasswordVisibility(): void {
-    this.hidePassword = !this.hidePassword;
   }
 
   onSubmit(): void {
@@ -98,19 +112,39 @@ export class UserProfile implements OnInit {
           formValues.username !== this.userInfo.username
             ? formValues.username
             : null,
-        password: formValues.password || null,
+        email:
+          formValues.email !== this.userInfo.email ? formValues.email : null,
+        picture: null, // TO DO : picture
       };
 
-      this.userService.updateUser(this.userInfo.id, updateDto).subscribe({
-        next: () => {
-          console.log('Profile updated successfully');
-          // TODO: Add toast/snackbar notification
-        },
-        error: (err) => {
-          console.error('Profile update failed', err);
-          // TODO: Add error handling toast/snackbar
-        },
-      });
+      if (updateDto.username !== null || updateDto.email !== null) {
+        this.userService.updateUser(this.userInfo.id, updateDto).subscribe({
+          next: () => {
+            this.snackBar.open('Profil modifié avec succès !', '', {
+              duration: 1500,
+            });
+          },
+          error: () => {
+            this.snackBar.open('Échec de la mise à jour du profil.', '', {
+              duration: 1500,
+            });
+          },
+        });
+      }
+    }
+  }
+  refreshFollowedThemes(): void {
+    if (this.userInfo) {
+      this.followedThemes$ = combineLatest([
+        this.themesService.themes$,
+        this.authService.userInfo$,
+      ]).pipe(
+        map(([themes, userInfo]) => {
+          return userInfo
+            ? themes.filter((theme) => userInfo.themesSet.includes(theme.id))
+            : [];
+        })
+      );
     }
   }
 }

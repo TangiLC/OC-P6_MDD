@@ -143,12 +143,19 @@ public class UserService {
         user.setUsername(newUsername);
       });
 
-    // Mise à jour du mot de passe uniquement si présent dans le DTO
-    Optional
-      .ofNullable(updateUserDto.getPassword())
-      .filter(password -> !password.isBlank())
-      .map(passwordEncoder::encode)
-      .ifPresent(user::setPassword);
+     // Mise à jour de l'email uniquement si présent dans le DTO
+     Optional
+     .ofNullable(updateUserDto.getEmail())
+     .filter(email -> !email.isBlank())
+     .ifPresent(newEmail -> {
+         if (
+             !user.getEmail().equals(newEmail) &&
+             userRepository.existsByUsernameOrEmail("", newEmail)
+         ) {
+             throw new IllegalArgumentException("Email is already taken");
+         }
+         user.setEmail(newEmail);
+     });
 
     // Mise à jour de l'image uniquement si présente dans le DTO
     Optional.ofNullable(updateUserDto.getPicture()).ifPresent(user::setPicture);

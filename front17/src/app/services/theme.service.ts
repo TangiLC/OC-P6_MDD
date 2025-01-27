@@ -13,10 +13,10 @@ export class ThemesService {
   private themesSubject = new BehaviorSubject<Theme[]>([]);
   themes$ = this.themesSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private httpClient: HttpClient) {}
 
   loadThemes(): Observable<Theme[]> {
-    return this.http.get<Theme[]>(this.userApiUrl + 'themes').pipe(
+    return this.httpClient.get<Theme[]>(this.userApiUrl + 'themes').pipe(
       tap((themes) => {
         this.themesSubject.next(themes);
       })
@@ -24,6 +24,7 @@ export class ThemesService {
   }
 
   getAllThemes(): Observable<Theme[]> {
-    return this.http.get<Theme[]>(this.userApiUrl + 'themes');
+    return this.httpClient.get<Theme[]>(this.userApiUrl + 'themes');
   }
+
 }

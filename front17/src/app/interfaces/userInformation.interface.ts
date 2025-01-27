@@ -4,6 +4,6 @@ export interface UserInformation {
   email: string;
   picture?: string;
   isAdmin: boolean;
-  themeSet: number[];
-  commentSet: number[];
+  themesSet: number[];
+  commentsSet: number[];
 }

@@ -1,0 +1,33 @@
+// theme-detail.component.scss
+.theme-detail {
+  margin: 1rem;
+
+  .theme-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+
+    .theme-icon {
+      width: 1.4rem;
+      height: 1.4rem;
+      object-fit: contain;
+    }
+  }
+
+  .theme-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    margin: 0.5rem 0;
+  }
+}
+
+.follow-actions{
+  display:flex;
+  justify-content: center;
+  margin:.5rem;
+}
