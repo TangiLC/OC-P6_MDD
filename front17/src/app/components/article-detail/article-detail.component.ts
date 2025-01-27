@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { ThemesService } from '../../services/theme.service';
+import { map, Observable, of } from 'rxjs';
+import { Theme } from '../../interfaces/theme.interface';
 
 @Component({
   selector: 'app-article-detail',
@@ -19,22 +22,27 @@ export class ArticleDetailComponent {
     createdAt: string;
     updatedAt: string;
     authorUsername: string;
-    authorPicture:string;
+    authorPicture: string;
     themeIds: number[];
   } | null = null;
-  
+  @Input() isFullView: Boolean | undefined;
 
-  themes: { [key: number]: string } = {
-    1: 'Angular',
-    2: 'BDD',
-    3: 'Spring',
-    4: 'Tests',
-    5: 'UX/UI',
-    6: 'Style'
-  };
-  
-  getThemeNames(): string[] {
-    if (!this.article?.themeIds) return [];
-    return this.article.themeIds.map(id => this.themes[id] || 'Inconnu');
+  themes$: Observable<Theme[]> | null = null;
+  constructor(private themesService: ThemesService) {}
+
+  ngOnInit(): void {
+    this.themes$ = this.themesService.themes$;
+  }
+
+  getThemeTitle(themeId: number, themes: Theme[]): string {
+    return themes.find((theme) => theme.id === themeId)?.title ?? 'Inconnu';
+  }
+  getThemeColor(themeId: number, themes: Theme[]): string {
+    return '#' + (themes.find((theme) => theme.id === themeId)?.color ?? 'fff');
+  }
+  getThemeIcon(themeId: number, themes: Theme[]): string {
+    return (
+      (themes.find((theme) => theme.id === themeId)?.icon ?? 'themeA') + '.png'
+    );
   }
 }

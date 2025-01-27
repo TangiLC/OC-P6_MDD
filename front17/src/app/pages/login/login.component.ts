@@ -13,6 +13,7 @@ import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../interfaces/loginRequest.interface';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ThemesService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,7 @@ import { of } from 'rxjs';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
-    BackArrowComponent
+    BackArrowComponent,
   ],
 })
 export class LoginComponent implements OnInit {
@@ -38,6 +39,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private themeService: ThemesService,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
@@ -73,7 +75,9 @@ export class LoginComponent implements OnInit {
         .subscribe((userInfo) => {
           this.isLoading = false;
           if (userInfo) {
-            this.router.navigate(['/articles']);
+            this.themeService.loadThemes().subscribe(() => {
+              this.router.navigate(['/articles']);
+            });
           }
         });
     }

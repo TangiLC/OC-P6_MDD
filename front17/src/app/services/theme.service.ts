@@ -1,17 +1,29 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 import { Theme } from '../interfaces/theme.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemesService {
-  private readonly apiUrl = '/api/themes';
+  private userApiUrl = `${environment.apiBaseUrl}api/`;
+
+  private themesSubject = new BehaviorSubject<Theme[]>([]);
+  themes$ = this.themesSubject.asObservable();
 
   constructor(private http: HttpClient) {}
 
+  loadThemes(): Observable<Theme[]> {
+    return this.http.get<Theme[]>(this.userApiUrl + 'themes').pipe(
+      tap((themes) => {
+        this.themesSubject.next(themes);
+      })
+    );
+  }
+
   getAllThemes(): Observable<Theme[]> {
-    return this.http.get<Theme[]>(this.apiUrl);
+    return this.http.get<Theme[]>(this.userApiUrl + 'themes');
   }
 }

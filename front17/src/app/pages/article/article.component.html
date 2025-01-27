@@ -1,8 +1,13 @@
 <div class="center">
-  <app-back-arrow />
+  
   <div class="article-container" *ngIf="article">
+    <div class="update-button" *ngIf=isAllowed>
+      <button mat-raised-button color="primary" (click)="navigateToUpdateArticle(article.id)">
+        Modifier l'article
+      </button>
+    </div>
     <div>
-      <app-article-detail [article]="article"></app-article-detail>
+      <app-article-detail [article]="article" [isFullView]="true"></app-article-detail>
     </div>
 
     <div class="comments-section">

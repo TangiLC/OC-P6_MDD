@@ -13,6 +13,7 @@ import { environment } from '../../../environments/environment';
 import { NavigationEnd, Router } from '@angular/router';
 import { shareReplay } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { BackArrowComponent } from '../back-arrow/back-arrow.component';
 
 @Component({
   selector: 'app-navbar',
@@ -27,6 +28,7 @@ import { Observable } from 'rxjs';
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    BackArrowComponent,
   ],
 })
 export class NavbarComponent implements OnInit {

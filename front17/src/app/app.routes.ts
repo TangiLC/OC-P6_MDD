@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { UnauthGuard } from './guards/unauth.guard';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { ThemesGuard } from './guards/themes.guard';
 
 export const routes: Routes = [
   {
@@ -27,7 +28,7 @@ export const routes: Routes = [
       import('./pages/user-profile/user-profile.component').then(
         (m) => m.UserProfile
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, ThemesGuard],
   },
   {
     path: 'article/:id',
@@ -35,14 +36,14 @@ export const routes: Routes = [
       import('./pages/article/article.component').then(
         (m) => m.ArticleComponent
       ),
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, ThemesGuard],
   },
-  /*{
-    path: 'articles',
-    loadChildren: () =>
-      import('./pages/articles/articles.module').then((m) => m.ArticlesModule),
-    canActivate: [AuthGuard],
-  },*/
+  {
+    path: 'theme/:id',
+    loadComponent: () =>
+      import('./pages/theme/theme.component').then((m) => m.ThemeComponent),
+    canActivate: [AuthGuard, ThemesGuard],
+  },
   /*{
     path: 'themes',
     loadChildren: () =>

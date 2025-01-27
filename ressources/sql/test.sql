@@ -40,37 +40,37 @@ VALUES
         'Angular et librairies',
         'Un projet Angular sans librairie, c’est comme un plat sans épices : fade et sans saveur !',
         'themeA',
-        'FF5733'
+        'FFDAB9'
     ),
     (
         'Base de données',
         'Tout sur les bases de données, les relations',
         'themeB',
-        '33FF57'
+        'A1EAFB'
     ),
     (
         'Spring-boot Java',
         'Tout sous la main, plus qu’à assembler !',
         'themeC',
-        '3357FF'
+        'B2F2BB'
     ),
     (
         'Tests',
         'Le test, c’est comme aller chez le médecin : personne n’aime ça, mais ça évite de gros problèmes.',
         'themeD',
-        'F0FF33'
+        'FFABAB'
     ),
     (
         'UX/UI',
         'L’UX/UI, c’est le chef d’orchestre du front-end. Avec un design pourri, les utilisateurs fuient.',
         'themeE',
-        'FF33A1'
+        'CBAACB'
     ),
     (
         'Style CSS',
         'Un décorateur d’intérieur peut cacher le chaos sous une belle facade...',
         'themeF',
-        '33FFF0'
+        'FDFD96'
     );
 
 -- Insertion des articles
@@ -85,82 +85,82 @@ VALUES
     (
         'Guide sur les bases de données',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        2,'2025-01-01 12:00:00'
+        2,'2025-01-02 12:00:00'
     ),
     (
         'Démarrer avec Spring-boot',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        3,'2025-01-01 12:00:00'
+        3,'2025-01-03 12:00:00'
     ),
     (
         'Jest et Jasmine',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        4,'2025-01-01 12:00:00'
+        4,'2025-01-04 12:00:00'
     ),
     (
         'Design inclusif',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        1,'2025-01-01 12:00:00'
+        1,'2025-01-05 12:00:00'
     ),
     (
         'Créer un site avec HTML/CSS',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        2,'2025-01-01 12:00:00'
+        2,'2025-01-06 12:00:00'
     ),
     (
         'Programmation orientée objet',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        3,'2025-01-01 12:00:00'
+        3,'2025-01-07 12:00:00'
     ),
     (
         'SQL vs NoSQL',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        4,'2025-01-01 12:00:00'
+        4,'2025-01-08 12:00:00'
     ),
     (
         'Les algorithmes',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        2,'2025-01-01 12:00:00'
+        2,'2025-01-09 12:00:00'
     ),
     (
         'Créer un site avec HTML/CSS',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        3,'2025-01-01 12:00:00'
+        3,'2025-01-10 12:00:00'
     ),
     (
         'Optimisation de bases de données',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        2,'2025-01-01 12:00:00'
+        2,'2025-01-11 12:00:00'
     ),
     (
         'Créer une application web dynamique',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        1,'2025-01-01 12:00:00'
+        1,'2025-01-12 12:00:00'
     ),
     (
         'Tout savoir sur Angular et RxJs',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        2,'2025-01-01 12:00:00'
+        2,'2025-01-13 12:00:00'
     ),
     (
         'Spring-Boot Hibernate',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        3,'2025-01-01 12:00:00'
+        3,'2025-01-14 12:00:00'
     ),
     (
         'L’importance des tests automatisés',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        4,'2025-01-01 12:00:00'
+        4,'2025-01-15 12:00:00'
     ),
     (
         'Améliorer l’UX/UI de vos applications',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        2,'2025-01-01 12:00:00'
+        2,'2025-01-16 12:00:00'
     ),
     (
         'Styliser avec CSS',
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean nec massa vitae ante eleifend tincidunt. Praesent dignissim elit eros, quis placerat ligula pharetra id. Duis neque ligula, molestie nec mollis eget, gravida sit amet elit. Sed fringilla tellus sed dui euismod euismod. Maecenas ac odio tincidunt, ornare nulla non, cursus odio. Proin venenatis hendrerit egestas. Praesent commodo pharetra felis nec porttitor. Maecenas lacinia turpis eget arcu volutpat, gravida malesuada velit hendrerit. Sed lorem erat, tempor id nunc at, blandit tristique metus. Vivamus magna ligula, facilisis a in. ',
-        3,'2025-01-01 12:00:00'
+        3,'2025-01-17 12:00:00'
     );
 
 -- Insertion des relations article-thèmes
@@ -188,7 +188,7 @@ VALUES
     ('Explications claires.', 2, 10,'2025-01-01 12:00:00'),
     ('Article intéressant.', 3, 11,'2025-01-01 12:00:00'),
     ('J’adore ce thème.', 4, 12,'2025-01-01 12:00:00'),
-    ('Bon résumé.', 2, 13,'2025-01-01 12:00:00'),
+    ('Bon résumé.', 4, 13,'2025-01-01 12:00:00'),
     ('Informations utiles.', 3, 14,'2025-01-01 12:00:00'),
     ('Contenu très pertinent.', 4, 15,'2025-01-01 12:00:00'),
     ('Merci pour les détails.', 2, 16,'2025-01-01 12:00:00'),

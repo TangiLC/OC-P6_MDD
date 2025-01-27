@@ -2,25 +2,35 @@
   <mat-card-title>{{ article?.title }}</mat-card-title>
   <mat-card-subtitle>
     <div class="metadata">
-      <span><mat-icon fontIcon="calendar_today"></mat-icon>
-        {{ article?.createdAt | date:'mediumDate' }}</span>
-      <span><img [src]="'/assets/profils/'+article?.authorPicture+'.png'" [alt]="article?.authorUsername"
-          class="author-picture" onerror="this.src='/assets/profils/default.png'" /></span>
-      <span class="author">{{ article?.authorUsername }}</span>
-
-      <span>
-        Thèmes :
-        <span *ngIf="getThemeNames().length; else noThemes">
-          {{ getThemeNames().join(', ') }}
-        </span>
-        <ng-template #noThemes>Non défini</ng-template>
-      </span>
+      <div class="date-author">
+        <div><mat-icon fontIcon="calendar_today"></mat-icon>
+          {{ article?.createdAt | date:'mediumDate' }}</div>
+        <div class="author-info"><img [src]="'/assets/profils/'+article?.authorPicture+'.png'"
+            [alt]="article?.authorUsername" class="author-picture" onerror="this.src='/assets/profils/default.png'" />
+          <div class="author">{{ article?.authorUsername }}</div>
+        </div>
+      </div>
+      <ng-container *ngIf="isFullView">
+        <ng-container *ngIf="themes$ | async as themes">
+          <div class="themes-list">
+            <div *ngFor="let themeId of article?.themeIds">
+              <div [style.backgroundColor]="getThemeColor(themeId, themes)" class="theme">
+                <img [src]="'/assets/themes/'+getThemeIcon(themeId, themes)" alt="theme icon" class="theme-icon"
+                  onerror="this.src='/assets/themes/themeA.png'" />
+                &nbsp;
+                {{ getThemeTitle(themeId, themes) }}
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
     </div>
   </mat-card-subtitle>
 
   <mat-divider></mat-divider>
 
   <mat-card-content>
-    <p>{{ article?.content }}</p>
+    <p [ngClass]="isFullView ? 'full-view' : 'abstract'">{{ article?.content }}</p>
   </mat-card-content>
+
 </mat-card>
