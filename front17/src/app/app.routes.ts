@@ -25,8 +25,8 @@ export const routes: Routes = [
   {
     path: 'profil',
     loadComponent: () =>
-      import('./pages/user-profile/user-profile.component').then(
-        (m) => m.UserProfile
+      import('./pages/user-info/user-info.component').then(
+        (m) => m.UserInfoComponent
       ),
     canActivate: [AuthGuard, ThemesGuard],
   },
@@ -42,6 +42,14 @@ export const routes: Routes = [
     path: 'theme/:id',
     loadComponent: () =>
       import('./pages/theme/theme.component').then((m) => m.ThemeComponent),
+    canActivate: [AuthGuard, ThemesGuard],
+  },
+  {
+    path: 'themes',
+    loadComponent: () =>
+      import('./pages/themes/themes.component').then(
+        (m) => m.ThemesPageComponent
+      ),
     canActivate: [AuthGuard, ThemesGuard],
   },
   /*{

@@ -18,7 +18,6 @@
           Username cannot be blank
         </mat-error>
       </mat-form-field>
-
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" type="email">
@@ -32,38 +31,14 @@
           Email must not exceed 50 characters
         </mat-error>
       </mat-form-field>
-
-      <button mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid || 
-                         (profileForm.value.username === userInfo.username && 
-                          profileForm.value.email === userInfo.email)">
+      <button mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid ||
+                       (profileForm.value.username === userInfo.username &&
+                        profileForm.value.email === userInfo.email)">
         Sauvegarder
       </button>
-
       <a href="javascript:void(0)" (click)="authService.logout()" class="logout-link">
         Se déconnecter
       </a>
     </form>
   </mat-card-content>
-</mat-card>
-
-
-<mat-card *ngIf="userInfo && (followedThemes$ | async) as followedThemes" class="followed-themes-card">
-
-  <mat-card-header>
-    <mat-card-title class="themes-title">Abonnements ({{ followedThemes.length }})</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <div class="themes-grid" *ngIf="followedThemes.length > 0; else noThemes">
-      <app-theme-detail *ngFor="let theme of followedThemes" class="theme-card" [theme]="theme" [isFullView]="false"
-        (themeRefresh)="refreshFollowedThemes()"></app-theme-detail>
-    </div>
-
-    <ng-template #noThemes>
-      <div class="no-themes-message">
-
-        <p>Vous ne suivez aucun thème pour le moment</p>
-      </div>
-    </ng-template>
-  </mat-card-content>
-
 </mat-card>

@@ -19,10 +19,6 @@ import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { UserInformation } from '../../interfaces/userInformation.interface';
 import { UpdateUserDto } from '../../interfaces/updateUserDto.interface';
-import { combineLatest, map, Observable, tap } from 'rxjs';
-import { Theme } from '../../interfaces/theme.interface';
-import { ThemesService } from '../../services/theme.service';
-import { ThemeDetailComponent } from '../../components/theme-detail/theme-detail.component';
 
 export function notBlankValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
@@ -32,6 +28,7 @@ export function notBlankValidator(): ValidatorFn {
     return isValid ? null : { blank: { value: value } };
   };
 }
+
 @Component({
   selector: 'app-user-profile',
   standalone: true,
@@ -44,30 +41,18 @@ export function notBlankValidator(): ValidatorFn {
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
-    ThemeDetailComponent,
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
 })
-export class UserProfile implements OnInit {
+export class UserProfileComponent implements OnInit {
   userInfo: UserInformation | null = null;
   profileForm: FormGroup;
-  followedThemes$: Observable<Theme[]> = combineLatest([
-    this.themesService.themes$,
-    this.authService.userInfo$,
-  ]).pipe(
-    map(([themes, userInfo]) => {
-      return userInfo
-        ? themes.filter((theme) => userInfo.themesSet.includes(theme.id))
-        : [];
-    })
-  );
 
   constructor(
     private userService: UserService,
     public authService: AuthService,
     private fb: FormBuilder,
-    private themesService: ThemesService,
     private snackBar: MatSnackBar
   ) {
     this.profileForm = this.fb.group({
@@ -114,13 +99,13 @@ export class UserProfile implements OnInit {
             : null,
         email:
           formValues.email !== this.userInfo.email ? formValues.email : null,
-        picture: null, // TO DO : picture
+        picture: null,
       };
 
       if (updateDto.username !== null || updateDto.email !== null) {
         this.userService.updateUser(this.userInfo.id, updateDto).subscribe({
           next: () => {
-            this.snackBar.open('Profil modifié avec succès !', '', {
+            this.snackBar.open('Profil modifié avec succès !', '', {
               duration: 1500,
             });
           },
@@ -131,20 +116,6 @@ export class UserProfile implements OnInit {
           },
         });
       }
-    }
-  }
-  refreshFollowedThemes(): void {
-    if (this.userInfo) {
-      this.followedThemes$ = combineLatest([
-        this.themesService.themes$,
-        this.authService.userInfo$,
-      ]).pipe(
-        map(([themes, userInfo]) => {
-          return userInfo
-            ? themes.filter((theme) => userInfo.themesSet.includes(theme.id))
-            : [];
-        })
-      );
     }
   }
 }
