@@ -74,6 +74,7 @@ export class UserProfileComponent implements OnInit {
           Validators.maxLength(50),
         ],
       ],
+      picture: null,
     });
   }
 
@@ -99,7 +100,7 @@ export class UserProfileComponent implements OnInit {
             : null,
         email:
           formValues.email !== this.userInfo.email ? formValues.email : null,
-        picture: null,
+        picture: formValues.picture || null,
       };
 
       if (updateDto.username !== null || updateDto.email !== null) {

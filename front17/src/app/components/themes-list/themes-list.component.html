@@ -10,12 +10,12 @@
   <mat-card-content>
     <div class="themes-grid" *ngIf="themes.length > 0; else noThemes">
       <app-theme-detail *ngFor="let theme of themes" class="theme-card" [theme]="theme" [isFullView]="false"
-        (themeRefresh)="refreshThemes()">
+        (themeRefresh)="refreshThemes()" (click)="navigateToTheme(theme.id)" [ngClass]="{'clickable': true}">
       </app-theme-detail>
     </div>
     <ng-template #noThemes>
       <div class="no-themes-message">
-        <p>Vous ne suivez aucun thème pour le moment</p>
+        <p>Aucun thème à afficher</p>
       </div>
     </ng-template>
   </mat-card-content>

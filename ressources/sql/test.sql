@@ -36,6 +36,12 @@ VALUES
 INSERT INTO
     THEMES (title, description, icon, color)
 VALUES
+ (
+        'News',
+        'Les derniers articles publiés sont ici !',
+        'themeG',
+        'EEEEEE'
+    ),
     (
         'Angular et librairies',
         'Un projet Angular sans librairie, c’est comme un plat sans épices : fade et sans saveur !',

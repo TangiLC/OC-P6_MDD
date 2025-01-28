@@ -4,7 +4,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, forkJoin, map, switchMap } from 'rxjs';
+import {
+  Observable,
+  forkJoin,
+  map,
+  of,
+  switchMap,
+  timeout,
+  timeoutWith,
+} from 'rxjs';
 import { ThemesService } from '../../services/theme.service';
 import { ArticleService } from '../../services/article.service';
 import { Theme } from '../../interfaces/theme.interface';
@@ -49,7 +57,7 @@ export class ThemeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const themeId = this.route.snapshot.paramMap.get('id');
+    const themeId = this.route.snapshot.paramMap.get('id') || 1;
 
     this.theme$ = this.themesService.themes$.pipe(
       map((themes) => themes.find((t) => t.id === Number(themeId)))
@@ -57,17 +65,19 @@ export class ThemeComponent implements OnInit {
 
     this.articles$ = this.theme$.pipe(
       switchMap((theme) => {
-        if (!theme?.articleIds?.length) return [];
+        if (!theme?.articleIds || theme?.articleIds?.length == 0) return of([]);
         const articleRequests = theme.articleIds.map((id) =>
           this.articleService.getArticleById(id)
         );
-        return forkJoin(articleRequests);
+        return forkJoin(articleRequests).pipe(
+          timeout({ first: 10000, with: () => of([]) })
+        );
       })
     );
 
     this.articles$.subscribe((articles) => {
       this.sortedArticles = [...articles];
-      this.sortArticles('recentDate'); 
+      this.sortArticles('recentDate');
     });
   }
 

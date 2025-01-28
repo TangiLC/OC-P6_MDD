@@ -1,5 +1,3 @@
-
-
 <div class="theme-container" *ngIf="theme$ | async as theme">
   <header class="theme-header" [style.backgroundColor]="'#'+theme.color">
     <div class="create-button">
@@ -27,15 +25,19 @@
 
   <div class="articles-grid">
     <ng-container *ngIf="articles$ | async as articles; else loading">
-      <app-article-detail *ngFor="let article of sortedArticles" [article]="article" [isFullView]="false" class="article-card"
-        (click)="navigateToArticle(article.id)" [ngClass]="{'clickable': true}">
-      </app-article-detail>
+      <ng-container *ngIf="articles.length > 0; else noArticles">
+        <app-article-detail *ngFor="let article of sortedArticles" [article]="article" [isFullView]="false"
+          class="article-card" (click)="navigateToArticle(article.id)" [ngClass]="{'clickable': true}">
+        </app-article-detail></ng-container>
+      <ng-template #noArticles>
+        <p>Aucun article à afficher.</p>
+      </ng-template>
     </ng-container>
   </div>
 </div>
 
 <ng-template #loading>
   <div class="loading-container">
-    <mat-spinner diameter="40"></mat-spinner>
+    <mat-spinner diameter="50"></mat-spinner>
   </div>
 </ng-template>

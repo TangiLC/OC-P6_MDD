@@ -85,12 +85,7 @@ export class NavbarComponent implements OnInit {
     } else {
       this.isNavbarHidden = false;
     }
-    console.log(
-      'UPDATE NAVBAR',
-      screenWidth,
-      this.currentUrl,
-      this.isNavbarHidden
-    );
+    
   }
 
   toggleMenu() {

@@ -52,6 +52,7 @@
   border: 1px solid grey;
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .theme-icon {
@@ -70,6 +71,7 @@ mat-divider {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: zoom-in;
 }
 
 @media screen and (max-width: 758px) {

@@ -11,7 +11,7 @@ export class ThemesService {
   private userApiUrl = `${environment.apiBaseUrl}api/`;
 
   private themesSubject = new BehaviorSubject<Theme[]>([]);
-  themes$ = this.themesSubject.asObservable();
+  public themes$ = this.themesSubject.asObservable();
 
   constructor(private httpClient: HttpClient) {}
 

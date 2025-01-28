@@ -32,6 +32,7 @@ export class ThemeDetailComponent implements OnInit {
   @Output() themeRefresh = new EventEmitter<void>();
 
   isFollowing: boolean = false;
+  today: Date = new Date();
 
   constructor(
     private authService: AuthService,
@@ -46,21 +47,26 @@ export class ThemeDetailComponent implements OnInit {
     });
   }
 
-  followTheme(): void {
+  followTheme(event: MouseEvent): void {
+    event.stopPropagation();
     if (this.theme) {
       this.userService
         .addThemeToUser(this.theme.id)
         .pipe(switchMap(() => this.userService.getUserInfo()))
         .subscribe({
           next: (userInfo) => {
-            this.snackBar.open('Thème suivi avec succès !', '', {
-              duration: 1500,
-            });
+            this.snackBar.open(
+              'Abonnement au thème enregistré avec succès !',
+              '',
+              {
+                duration: 1500,
+              }
+            );
             this.authService.setUserInfo(userInfo);
             this.themeRefresh.emit();
           },
           error: (error) => {
-            this.snackBar.open('Erreur dans le suivi du thème !', '', {
+            this.snackBar.open("Erreur dans l'abonnement au thème !", '', {
               duration: 1500,
             });
             console.error('Error following theme:', error);
@@ -69,21 +75,26 @@ export class ThemeDetailComponent implements OnInit {
     }
   }
 
-  unfollowTheme(): void {
+  unfollowTheme(event: MouseEvent): void {
+    event.stopPropagation();
     if (this.theme) {
       this.userService
         .removeThemeFromUser(this.theme.id)
         .pipe(switchMap(() => this.userService.getUserInfo()))
         .subscribe({
           next: (userInfo) => {
-            this.snackBar.open('Thème désabonné avec succès !', '', {
-              duration: 1500,
-            });
+            this.snackBar.open(
+              'Désabonnement au thème enregistré avec succès !',
+              '',
+              {
+                duration: 1500,
+              }
+            );
             this.authService.setUserInfo(userInfo);
             this.themeRefresh.emit();
           },
           error: (error) => {
-            this.snackBar.open('Erreur dans le suivi du thème !', '', {
+            this.snackBar.open('Erreur dans le désabonnement au thème !', '', {
               duration: 1500,
             });
             console.error('Error following theme:', error);

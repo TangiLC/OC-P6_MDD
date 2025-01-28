@@ -52,6 +52,20 @@ export const routes: Routes = [
       ),
     canActivate: [AuthGuard, ThemesGuard],
   },
+  {
+    path: 'articles',
+    loadComponent: () =>
+      import('./pages/theme/theme.component').then((m) => m.ThemeComponent),
+    canActivate: [AuthGuard, ThemesGuard],
+  },
+  {
+    path: 'create_article',
+    loadComponent: () =>
+      import('./pages/create-article/create-article.component').then(
+        (m) => m.CreateArticleComponent
+      ),
+    canActivate: [AuthGuard, ThemesGuard],
+  },
   /*{
     path: 'themes',
     loadChildren: () =>

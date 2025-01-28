@@ -15,4 +15,15 @@ export class ArticleService {
   getArticleById(id: number): Observable<Article> {
     return this.httpClient.get<Article>(`${this.baseUrl}/${id}`);
   }
+  createArticle(article: any): Observable<Article> {
+    return this.httpClient.post<Article>(`${this.baseUrl}`, article);
+  }
+
+  updateArticle(id: number, article: any): Observable<Article> {
+    return this.httpClient.put<Article>(`${this.baseUrl}/${id}`, article);
+  }
+
+  deleteArticle(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.baseUrl}/${id}`);
+  }
 }

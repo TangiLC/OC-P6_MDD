@@ -38,6 +38,15 @@ public class ArticleService {
     List<Theme> themes = themeRepository.findAllById(
       createArticleDto.getThemeIds()
     );
+    Theme newsTheme = themeRepository //ajout auto à thème 1=NEWS qui sera cleanup dans 21j
+      .findById(1L)
+      .orElseThrow(() ->
+        new RuntimeException("Impossible de trouver le thème NEWS (id=1)")
+      );
+    if (!themes.contains(newsTheme)) {
+      themes.add(newsTheme);
+    }
+
     if (themes.isEmpty()) {
       throw new RuntimeException("theme is missing");
     }

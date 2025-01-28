@@ -14,7 +14,9 @@
         <ng-container *ngIf="themes$ | async as themes">
           <div class="themes-list">
             <div *ngFor="let themeId of article?.themeIds">
-              <div [style.backgroundColor]="getThemeColor(themeId, themes)" class="theme">
+              <div [style.backgroundColor]="getThemeColor(themeId, themes)" class="theme"
+                title="Autres articles du thème {{getThemeTitle(themeId, themes)}}"
+                 (click)="navigateToTheme(themeId)" [ngClass]="{'clickable': true}">
                 <img [src]="'/assets/themes/'+getThemeIcon(themeId, themes)" alt="theme icon" class="theme-icon"
                   onerror="this.src='/assets/themes/themeA.png'" />
                 &nbsp;
