@@ -23,8 +23,23 @@ export class ThemesService {
     );
   }
 
-  getAllThemes(): Observable<Theme[]> {
-    return this.httpClient.get<Theme[]>(this.userApiUrl + 'themes');
+  getThemeById(id: number): Observable<Theme> {
+    return this.httpClient.get<Theme>(`${this.userApiUrl}theme/${id}`);
   }
 
+  /*getAllThemes(): Observable<Theme[]> {
+    return this.httpClient.get<Theme[]>(this.userApiUrl + 'themes');
+  }*/
+
+  createTheme(theme: Partial<Theme>): Observable<Theme> {
+    return this.httpClient.post<Theme>(this.userApiUrl + 'theme', theme);
+  }
+
+  updateTheme(id: number, theme: Partial<Theme>): Observable<Theme> {
+    return this.httpClient.put<Theme>(`${this.userApiUrl}theme/${id}`, theme);
+  }
+
+  deleteTheme(id: number): Observable<void> {
+    return this.httpClient.delete<void>(`${this.userApiUrl}theme/${id}`);
+  }
 }

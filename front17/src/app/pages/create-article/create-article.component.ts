@@ -7,11 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
@@ -24,6 +20,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { Article } from '../../interfaces/article.interface';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-create-article',
@@ -38,6 +35,7 @@ import { Article } from '../../interfaces/article.interface';
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
   ],
 })
 export class CreateArticleComponent implements OnInit {
@@ -172,7 +170,7 @@ export class CreateArticleComponent implements OnInit {
           this.router.navigate(['/articles']);
         },
         error: (e) => {
-          console.log("erreur creation",e);
+          console.log('erreur creation', e);
           this.snackBar.open("Echec dans la création de l'article.", 'Close', {
             duration: 3000,
           });
@@ -182,5 +180,36 @@ export class CreateArticleComponent implements OnInit {
 
   compareThemes(t1: number, t2: number): boolean {
     return t1 === t2;
+  }
+
+  deleteArticle(): void {
+    if (!this.articleId) return;
+
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
+      this.articleService
+        .deleteArticle(this.articleId)
+        .pipe(
+          switchMap(() => this.articleService.cleanupNewsArticles()),
+          switchMap(() => this.themesService.loadThemes())
+        )
+        .subscribe({
+          next: () => {
+            this.snackBar.open('Article supprimé avec succès!', 'Close', {
+              duration: 1500,
+            });
+
+            this.router.navigate(['/articles']);
+          },
+          error: () => {
+            this.snackBar.open(
+              "Erreur lors de la suppression de l'article.",
+              'Close',
+              {
+                duration: 3000,
+              }
+            );
+          },
+        });
+    }
   }
 }

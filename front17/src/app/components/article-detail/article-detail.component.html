@@ -4,7 +4,7 @@
     <div class="metadata">
       <div class="date-author">
         <div>
-          <ng-container *ngIf="(article?.updatedAt==article?.createdAt) ;else Edited">
+          <ng-container *ngIf="article?.updatedAt?.substring(0, 10) === article?.createdAt?.substring(0, 10); else Edited">
             <span><mat-icon fontIcon="calendar_today"></mat-icon></span>
           </ng-container><ng-template #Edited>
             <span><mat-icon fontIcon="update"></mat-icon></span>

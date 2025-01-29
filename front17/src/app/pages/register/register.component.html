@@ -32,6 +32,8 @@
           <span *ngIf="registerForm.get('password')?.errors?.['required']">Le mot de passe est requis</span>
           <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Minimum 6 caractères</span>
           <span *ngIf="registerForm.get('password')?.errors?.['maxlength']">Maximum 40 caractères</span>
+          <span *ngIf="registerForm.get('password')?.errors?.['pattern']">
+            Au moins une majuscule, un chiffre et un symbole</span>
         </mat-error>
       </mat-form-field>
 

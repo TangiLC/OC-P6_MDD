@@ -76,6 +76,23 @@ export const routes: Routes = [
   },
 
   {
+    path: 'create_theme',
+    loadComponent: () =>
+      import('./pages/create-theme/create-theme.component').then(
+        (m) => m.CreateThemeComponent
+      ),
+    canActivate: [AuthGuard, ThemesGuard],
+  },
+  {
+    path: 'update_theme/:id',
+    loadComponent: () =>
+      import('./pages/create-theme/create-theme.component').then(
+        (m) => m.CreateThemeComponent
+      ),
+    canActivate: [AuthGuard, ThemesGuard],
+  },
+
+  {
     path: '**',
     component: NotFoundComponent,
   },

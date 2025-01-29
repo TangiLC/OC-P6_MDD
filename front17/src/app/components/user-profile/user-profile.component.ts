@@ -1,3 +1,4 @@
+import { MatRadioModule } from '@angular/material/radio';
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -41,6 +42,7 @@ export function notBlankValidator(): ValidatorFn {
     MatButtonModule,
     MatFormFieldModule,
     MatIconModule,
+    MatRadioModule,
   ],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.scss',
@@ -48,6 +50,7 @@ export function notBlankValidator(): ValidatorFn {
 export class UserProfileComponent implements OnInit {
   userInfo: UserInformation | null = null;
   profileForm: FormGroup;
+  avatars: string[] = Array.from({ length: 18 }, (_, i) => `profil${i + 1}`);
 
   constructor(
     private userService: UserService,
@@ -56,24 +59,8 @@ export class UserProfileComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.profileForm = this.fb.group({
-      username: [
-        '',
-        [
-          Validators.required,
-          notBlankValidator(),
-          Validators.minLength(3),
-          Validators.maxLength(30),
-        ],
-      ],
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email,
-          notBlankValidator(),
-          Validators.maxLength(50),
-        ],
-      ],
+      username: [''],
+      email: [''],
       picture: null,
     });
   }
@@ -85,9 +72,14 @@ export class UserProfileComponent implements OnInit {
         this.profileForm.patchValue({
           username: userInfo.username,
           email: userInfo.email,
+          picture: userInfo.picture || 'default',
         });
       }
     });
+  }
+
+  selectAvatar(avatar: string): void {
+    this.profileForm.patchValue({ picture: avatar });
   }
 
   onSubmit(): void {
@@ -100,7 +92,10 @@ export class UserProfileComponent implements OnInit {
             : null,
         email:
           formValues.email !== this.userInfo.email ? formValues.email : null,
-        picture: formValues.picture || null,
+        picture:
+          formValues.picture !== this.userInfo.picture
+            ? formValues.picture
+            : null,
       };
 
       if (updateDto.username !== null || updateDto.email !== null) {
