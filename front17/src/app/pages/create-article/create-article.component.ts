@@ -7,18 +7,23 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { ArticleService } from '../../services/article.service';
 import { ThemesService } from '../../services/theme.service';
 import { AuthService } from '../../services/auth.service';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { Theme } from '../../interfaces/theme.interface';
 import { map, switchMap } from 'rxjs/operators';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { Article } from '../../interfaces/article.interface';
 
 @Component({
   selector: 'app-create-article',
@@ -41,7 +46,7 @@ export class CreateArticleComponent implements OnInit {
   filteredThemes$!: Observable<Theme[]>;
   isEditMode: boolean = false;
   articleId: number | null = null;
-
+  originalArticle: any = null;
   constructor(
     private fb: FormBuilder,
     private articleService: ArticleService,
@@ -66,7 +71,7 @@ export class CreateArticleComponent implements OnInit {
       if (id) {
         this.isEditMode = true;
         this.articleId = +id;
-        this.loadArticleData(+id);
+        this.loadArticleDataIfPermitted(+id);
       }
     });
   }
@@ -79,9 +84,31 @@ export class CreateArticleComponent implements OnInit {
     });
   }
 
-  loadArticleData(id: number): void {
-    this.articleService.getArticleById(id).subscribe({
-      next: (article) => {
+  loadArticleDataIfPermitted(id: number): void {
+    combineLatest([
+      this.authService.userInfo$,
+      this.articleService.getArticleById(id),
+    ]).subscribe({
+      next: ([userInfo, article]) => {
+        if (
+          !userInfo?.isAdmin &&
+          article.authorUsername !== userInfo?.username
+        ) {
+          this.snackBar.open(
+            "Vous n'avez pas les droits nécessaires pour modifier l'article",
+            'Close',
+            {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: ['forbidden-snackbar'],
+            }
+          );
+          this.router.navigate(['/articles']);
+          return;
+        }
+
+        this.originalArticle = article;
         this.articleForm.patchValue({
           title: article.title,
           content: article.content,
@@ -96,6 +123,7 @@ export class CreateArticleComponent implements OnInit {
             duration: 1500,
           }
         );
+        this.router.navigate(['/articles']);
       },
     });
   }
@@ -105,7 +133,7 @@ export class CreateArticleComponent implements OnInit {
 
     const formData = this.articleForm.value;
 
-    // Ajouter le thème 1 (New) à la liste des thèmes
+    // Ajouter le thème 1 (News) à la liste des thèmes
     const themeIds = [...formData.themeIds];
     if (!themeIds.includes(1)) {
       themeIds.push(1);
@@ -115,13 +143,13 @@ export class CreateArticleComponent implements OnInit {
       ...formData,
       themeIds,
     };
-    // Add author and creation date automatically
+    // Ajout author auto
     this.authService.userInfo$
       .pipe(
         switchMap((user) => {
           const payload = {
             ...articleData,
-            author: user?.id,
+            author: this.isEditMode ? this.originalArticle.author : user?.id,
           };
 
           if (this.isEditMode && this.articleId) {
@@ -129,7 +157,9 @@ export class CreateArticleComponent implements OnInit {
           } else {
             return this.articleService.createArticle(payload);
           }
-        })
+        }),
+        switchMap(() => this.articleService.cleanupNewsArticles()),
+        switchMap(() => this.themesService.loadThemes())
       )
       .subscribe({
         next: () => {
@@ -138,16 +168,17 @@ export class CreateArticleComponent implements OnInit {
             'Close',
             { duration: 1500 }
           );
+
           this.router.navigate(['/articles']);
         },
-        error: () => {
+        error: (e) => {
+          console.log("erreur creation",e);
           this.snackBar.open("Echec dans la création de l'article.", 'Close', {
             duration: 3000,
           });
         },
       });
   }
-
 
   compareThemes(t1: number, t2: number): boolean {
     return t1 === t2;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Article } from '../interfaces/article.interface';
 
@@ -25,5 +25,11 @@ export class ArticleService {
 
   deleteArticle(id: number): Observable<void> {
     return this.httpClient.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+  cleanupNewsArticles(): Observable<string> {
+    return this.httpClient
+      .post<string>(`${this.baseUrl}/cleanup`, {})
+      .pipe(map((response) => response.toString()));
   }
 }

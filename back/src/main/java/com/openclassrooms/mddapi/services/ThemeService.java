@@ -2,12 +2,9 @@ package com.openclassrooms.mddapi.services;
 
 import com.openclassrooms.mddapi.dto.CreateThemeDto;
 import com.openclassrooms.mddapi.dto.ThemeDto;
-import com.openclassrooms.mddapi.models.Article;
 import com.openclassrooms.mddapi.models.Theme;
-import com.openclassrooms.mddapi.repositories.ArticleRepository;
 import com.openclassrooms.mddapi.repositories.ThemeRepository;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

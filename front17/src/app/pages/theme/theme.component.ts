@@ -60,7 +60,7 @@ export class ThemeComponent implements OnInit {
     const themeId = this.route.snapshot.paramMap.get('id') || 1;
 
     this.theme$ = this.themesService.themes$.pipe(
-      map((themes) => themes.find((t) => t.id === Number(themeId)))
+      map((themes) => themes.find((t) => t.id === +themeId))
     );
 
     this.articles$ = this.theme$.pipe(
@@ -94,13 +94,13 @@ export class ThemeComponent implements OnInit {
           return a.title.localeCompare(b.title);
         case 'recentDate':
           return (
-            new Date(b.createdAt.replace(' ', 'T')).getTime() -
-            new Date(a.createdAt.replace(' ', 'T')).getTime()
+            new Date(b.updatedAt.replace(' ', 'T')).getTime() -
+            new Date(a.updatedAt.replace(' ', 'T')).getTime()
           );
         case 'oldDate':
           return (
-            new Date(a.createdAt.replace(' ', 'T')).getTime() -
-            new Date(b.createdAt.replace(' ', 'T')).getTime()
+            new Date(a.updatedAt.replace(' ', 'T')).getTime() -
+            new Date(b.updatedAt.replace(' ', 'T')).getTime()
           );
         default:
           return 0;
@@ -113,6 +113,6 @@ export class ThemeComponent implements OnInit {
   }
 
   navigateToCreateArticle(themeId: number): void {
-    this.router.navigate(['/create_article', themeId]);
+    this.router.navigate(['/create_article']);
   }
 }

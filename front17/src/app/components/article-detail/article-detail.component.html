@@ -3,8 +3,15 @@
   <mat-card-subtitle>
     <div class="metadata">
       <div class="date-author">
-        <div><mat-icon fontIcon="calendar_today"></mat-icon>
-          {{ article?.createdAt | date:'mediumDate' }}</div>
+        <div>
+          <ng-container *ngIf="(article?.updatedAt==article?.createdAt) ;else Edited">
+            <span><mat-icon fontIcon="calendar_today"></mat-icon></span>
+          </ng-container><ng-template #Edited>
+            <span><mat-icon fontIcon="update"></mat-icon></span>
+            <span class="previous-date">{{ article?.createdAt | date:'mediumDate' }}&nbsp;</span>
+          </ng-template>{{ article?.updatedAt | date:'mediumDate' }}
+        </div>
+
         <div class="author-info"><img [src]="'/assets/profils/'+article?.authorPicture+'.png'"
             [alt]="article?.authorUsername" class="author-picture" onerror="this.src='/assets/profils/default.png'" />
           <div class="author">{{ article?.authorUsername }}</div>
@@ -15,8 +22,8 @@
           <div class="themes-list">
             <div *ngFor="let themeId of article?.themeIds">
               <div [style.backgroundColor]="getThemeColor(themeId, themes)" class="theme"
-                title="Autres articles du thème {{getThemeTitle(themeId, themes)}}"
-                 (click)="navigateToTheme(themeId)" [ngClass]="{'clickable': true}">
+                title="Autres articles du thème {{getThemeTitle(themeId, themes)}}" (click)="navigateToTheme(themeId)"
+                [ngClass]="{'clickable': true}">
                 <img [src]="'/assets/themes/'+getThemeIcon(themeId, themes)" alt="theme icon" class="theme-icon"
                   onerror="this.src='/assets/themes/themeA.png'" />
                 &nbsp;

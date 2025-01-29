@@ -3,7 +3,9 @@ package com.openclassrooms.mddapi.controllers;
 import com.openclassrooms.mddapi.dto.ArticleDto;
 import com.openclassrooms.mddapi.dto.CreateArticleDto;
 import com.openclassrooms.mddapi.dto.ErrorResponse;
+import com.openclassrooms.mddapi.services.ArticleCleanupService;
 import com.openclassrooms.mddapi.services.ArticleService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -36,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ArticleController {
 
   private final ArticleService articleService;
+  private final ArticleCleanupService articleCleanupService;
 
   @Operation(summary = "Create a new article")
   @ApiResponses(
@@ -295,5 +299,31 @@ public class ArticleController {
   ) {
     Set<ArticleDto> articles = articleService.getArticlesByAuthorId(authorId);
     return ResponseEntity.ok(articles);
+  }
+
+  /**
+   * Force cleanup of anciens articles in theme NEWS
+   *
+   * @return ResponseEntity with message confirmation
+   */
+  @PostMapping("/cleanup")
+  @Hidden
+  public ResponseEntity<Map<String, String>> forceCleanup() {
+    try {
+      articleCleanupService.cleanupOldNewsArticles();
+      return ResponseEntity.ok(
+        Map.of("message", "Nettoyage des articles effectué avec succès")
+      );
+    } catch (Exception e) {
+      return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(
+          Map.of(
+            "message",
+            "Une erreur est survenue lors du nettoyage des articles: " +
+            e.getMessage()
+          )
+        );
+    }
   }
 }

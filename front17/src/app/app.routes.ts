@@ -66,12 +66,15 @@ export const routes: Routes = [
       ),
     canActivate: [AuthGuard, ThemesGuard],
   },
-  /*{
-    path: 'themes',
-    loadChildren: () =>
-      import('./pages/themes/themes.module').then((m) => m.ThemesModule),
-    canActivate: [AuthGuard],
-  },*/
+  {
+    path: 'update_article/:id',
+    loadComponent: () =>
+      import('./pages/create-article/create-article.component').then(
+        (m) => m.CreateArticleComponent
+      ),
+    canActivate: [AuthGuard, ThemesGuard],
+  },
+
   {
     path: '**',
     component: NotFoundComponent,
