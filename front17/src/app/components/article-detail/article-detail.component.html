@@ -8,8 +8,8 @@
             <span><mat-icon fontIcon="calendar_today"></mat-icon></span>
           </ng-container><ng-template #Edited>
             <span><mat-icon fontIcon="update"></mat-icon></span>
-            <span class="previous-date">{{ article?.createdAt | date:'mediumDate' }}&nbsp;</span>
-          </ng-template>{{ article?.updatedAt | date:'mediumDate' }}
+            [<span class="previous-date">{{ article?.createdAt | date:'mediumDate' }}</span>]&nbsp;
+          </ng-template><span class="article-date">{{ article?.updatedAt | date:'mediumDate' }}</span>
         </div>
 
         <div class="author-info"><img [src]="'/assets/profils/'+article?.authorPicture+'.png'"

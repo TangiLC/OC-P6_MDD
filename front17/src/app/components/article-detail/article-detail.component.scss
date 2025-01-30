@@ -12,7 +12,7 @@
   font-size: 0.875rem;
 }
 
-.previous-date{
+.previous-date {
   text-decoration: line-through;
 }
 
@@ -21,6 +21,13 @@
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  mat-icon {
+    vertical-align: middle;
+  }
+}
+
+.previous-date,.article-date{
+  padding-top: .3rem;
 }
 
 .author-info {
@@ -29,7 +36,7 @@
 }
 
 .author {
-  padding-top: 0.3rem;
+  //padding-top: 0.3rem;
   font-weight: bold;
 }
 
@@ -40,7 +47,7 @@
   border-radius: 50%;
   border: 1px solid grey;
   object-fit: cover;
-  margin:0 5px;
+  margin: 0 5px;
 }
 
 .themes-list {
