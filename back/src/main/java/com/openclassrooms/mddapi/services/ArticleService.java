@@ -38,6 +38,15 @@ public class ArticleService {
     List<Theme> themes = themeRepository.findAllById(
       createArticleDto.getThemeIds()
     );
+    Theme newsTheme = themeRepository //ajout auto à thème 1=NEWS qui sera cleanup dans 21j
+      .findById(1L)
+      .orElseThrow(() ->
+        new RuntimeException("Impossible de trouver le thème NEWS (id=1)")
+      );
+    if (!themes.contains(newsTheme)) {
+      themes.add(newsTheme);
+    }
+
     if (themes.isEmpty()) {
       throw new RuntimeException("theme is missing");
     }
@@ -152,6 +161,7 @@ public class ArticleService {
             .content(comment.getContent())
             .createdAt(comment.getCreatedAt())
             .authorUsername(comment.getAuthor().getUsername())
+            .authorPicture(comment.getAuthor().getPicture())
             .articleId(article.getId())
             .build()
         )
@@ -167,6 +177,9 @@ public class ArticleService {
       .updatedAt(article.getUpdatedAt())
       .authorUsername(
         article.getAuthor() != null ? article.getAuthor().getUsername() : null
+      )
+      .authorPicture(
+        article.getAuthor() != null ? article.getAuthor().getPicture() : null
       )
       .themeIds(themeIds)
       .comments(comments)

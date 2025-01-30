@@ -43,6 +43,8 @@ public class UserDto {
   )
   private String picture;
 
+  private Boolean isAdmin;
+
   @Schema(
     description = "Set of theme IDs associated with the user",
     example = "[1, 2, 3]"

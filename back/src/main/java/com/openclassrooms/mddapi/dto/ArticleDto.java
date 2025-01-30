@@ -48,6 +48,9 @@ public class ArticleDto {
   @Schema(description = "Username of the author", example = "johndoe")
   private String authorUsername;
 
+  @Schema(description = "Picture ref of the author", example = "profil1")
+  private String authorPicture;
+
   @Schema(description = "Set of theme IDs associated with the article")
   private Set<Long> themeIds;
 

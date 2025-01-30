@@ -28,6 +28,10 @@ public class CommentDto {
     @Schema(description = "Username of the author", example = "Bob1")
     private String authorUsername;
 
+    @Schema(description = "Picture name of the author", example = "Profil1")
+    private String authorPicture;
+
+
     @Schema(description = "Article ID associated with the comment", example = "1")
     private Long articleId;
 }
