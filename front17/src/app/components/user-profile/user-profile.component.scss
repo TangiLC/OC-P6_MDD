@@ -79,6 +79,7 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
 }
 
 .avatar-item img {
@@ -89,8 +90,9 @@ button {
   object-fit: cover;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
+  z-index:40;
 }
 
 .avatar-item img:hover {
-  transform: scale(1.4);
+  transform: scale(2.4);
 }

@@ -42,9 +42,10 @@ La commande suivante va créer une nouvelle base de données (personnaliser le n
    CREATE DATABASE [database_name];
 ```
 
-Le fichier `script.sql` dans le dossier `/ressources/sql` à la racine de ce projet va initialiser la structure de la base de données. Importez ce fichier dans votre base MySQL via un outil comme **phpMyAdmin** ou **MySQL Workbench**, ou avec la commande suivante :
+Le fichier `script.sql` dans le dossier `/ressources/sql` à la racine de ce projet va initialiser la structure de la base de données. Le fichier `test.sql` contient un jeu de données pour remplir les tables. Importez ces fichiers dans votre base MySQL via un outil comme **phpMyAdmin** ou **MySQL Workbench**, ou avec la commande suivante :
 ```bash
 mysql -u [username] -p [database_name] < script.sql
+mysql -u [username] -p [database_name] < test.sql
 ```
 
 
