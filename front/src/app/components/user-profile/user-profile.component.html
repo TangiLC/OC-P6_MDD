@@ -1,0 +1,45 @@
+<mat-card *ngIf="userInfo" class="user-profile-card">
+  <mat-card-header>
+    <mat-card-title>Profil utilisateur</mat-card-title>
+
+  </mat-card-header>
+  <mat-card-content>
+    <div class="password"><button mat-raised-button color="accent" (click)="navigateToPasswordEdit()">
+      Changer de mot de passe
+    </button></div>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username">
+
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email">
+
+
+      </mat-form-field>
+
+      <div class="avatar-container">
+
+        <mat-radio-group formControlName="picture" class="avatar-grid">
+          <div *ngFor="let avatar of avatars" class="avatar-item">
+            <mat-radio-button [value]="avatar" (change)="selectAvatar(avatar)">
+              <img [src]="'./assets/profils/' + avatar + '.png'" [alt]="avatar">
+            </mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </div>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="profileForm.invalid ||
+                       (profileForm.value.username === userInfo.username &&
+                        profileForm.value.email === userInfo.email &&
+                        profileForm.value.picture === userInfo.picture)">
+        Sauvegarder
+      </button>
+      <a href="javascript:void(0)" (click)="authService.logout()" class="logout-link">
+        Se déconnecter
+      </a>
+    </form>
+  </mat-card-content>
+</mat-card>
