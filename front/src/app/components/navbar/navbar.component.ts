@@ -85,7 +85,7 @@ export class NavbarComponent implements OnInit {
     } else {
       this.isNavbarHidden = false;
     }
-    
+
   }
 
   toggleMenu() {
@@ -94,6 +94,5 @@ export class NavbarComponent implements OnInit {
 
   navigateTo(route: string) {
     this.router.navigate([route]);
-    console.log(route, ' CLICKED');
   }
 }

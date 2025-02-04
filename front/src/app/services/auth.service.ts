@@ -38,7 +38,6 @@ export class AuthService {
     this.userService.getUserInfo().subscribe({
       next: (userInfo: any) => {
         this.userInfoSubject.next(userInfo);
-        console.log('USER INFO:', userInfo);
       },
       error: () => {
         this.removeToken();
@@ -69,7 +68,6 @@ export class AuthService {
         }),
         switchMap(() => this.userService.getUserInfo()),
         tap((userInfo: UserInformation) => {
-          console.log('USER INFO:', userInfo);
           this.userInfoSubject.next(userInfo);
         })
       );
