@@ -33,8 +33,6 @@ public class UserDto {
   @Schema(description = "username", example = "myAlias1")
   private String username;
 
-  private Boolean isAdmin;
-
   @NotBlank
   @Size(max = 36)
   @Schema(

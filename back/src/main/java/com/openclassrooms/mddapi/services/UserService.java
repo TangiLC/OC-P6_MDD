@@ -14,7 +14,6 @@ import com.openclassrooms.mddapi.repositories.ThemeRepository;
 import com.openclassrooms.mddapi.repositories.UserRepository;
 import com.openclassrooms.mddapi.security.UserPrincipal;
 import com.openclassrooms.mddapi.security.utils.JwtTokenUtil;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -90,7 +89,6 @@ public class UserService {
       user.getId(),
       user.getEmail(),
       user.getUsername(),
-      user.getIsAdmin(),
       user.getPicture(),
       user.getIsAdmin(),
       themesIds,
