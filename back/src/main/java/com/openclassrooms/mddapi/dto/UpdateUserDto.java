@@ -26,4 +26,9 @@ public class UpdateUserDto {
     @Size(max = 36)
     @Schema(description = "picture uuid", example = "90ac3cab|null")
     private String picture;
+
+    @Size(max = 40)
+    @Schema(description = "password", example = "test123|null")
+    private String password;
+
 }

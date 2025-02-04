@@ -1,6 +1,19 @@
 // UserService.java
 package com.openclassrooms.mddapi.services;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.openclassrooms.mddapi.dto.UpdateUserDto;
 import com.openclassrooms.mddapi.dto.UserAbstractDto;
 import com.openclassrooms.mddapi.dto.UserDto;
@@ -14,18 +27,8 @@ import com.openclassrooms.mddapi.repositories.ThemeRepository;
 import com.openclassrooms.mddapi.repositories.UserRepository;
 import com.openclassrooms.mddapi.security.UserPrincipal;
 import com.openclassrooms.mddapi.security.utils.JwtTokenUtil;
-import java.util.List;
-import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -107,7 +110,9 @@ public class UserService {
     User user = userRepository
       .findByUsername(username)
       .orElseThrow(() ->
-        new IllegalArgumentException("User not found with username: " + username)
+        new IllegalArgumentException(
+          "User not found with username: " + username
+        )
       );
     return UserAbstractDto
       .builder()
@@ -142,22 +147,31 @@ public class UserService {
         user.setUsername(newUsername);
       });
 
-     // Mise à jour de l'email uniquement si présent dans le DTO
-     Optional
-     .ofNullable(updateUserDto.getEmail())
-     .filter(email -> !email.isBlank())
-     .ifPresent(newEmail -> {
-         if (
-             !user.getEmail().equals(newEmail) &&
-             userRepository.existsByUsernameOrEmail("", newEmail)
-         ) {
-             throw new IllegalArgumentException("Email is already taken");
-         }
-         user.setEmail(newEmail);
-     });
+    // Mise à jour de l'email uniquement si présent dans le DTO
+    Optional
+      .ofNullable(updateUserDto.getEmail())
+      .filter(email -> !email.isBlank())
+      .ifPresent(newEmail -> {
+        if (
+          !user.getEmail().equals(newEmail) &&
+          userRepository.existsByUsernameOrEmail("", newEmail)
+        ) {
+          throw new IllegalArgumentException("Email is already taken");
+        }
+        user.setEmail(newEmail);
+      });
 
     // Mise à jour de l'image uniquement si présente dans le DTO
     Optional.ofNullable(updateUserDto.getPicture()).ifPresent(user::setPicture);
+
+    // Mise à jour du mot de passe uniquement si présent dans le DTO
+    Optional
+      .ofNullable(updateUserDto.getPassword())
+      .filter(password -> !password.isBlank())
+      .ifPresent(newPassword -> {
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.setPassword(encodedPassword);
+      });
 
     User updatedUser = userRepository.save(user);
 
