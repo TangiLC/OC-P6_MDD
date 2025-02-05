@@ -2,7 +2,7 @@
   <header class="feed-header">
     <app-sort-form [options]="sortOptions" (sorted)="onSorted($event)"></app-sort-form>
   </header>
-  <ng-container *ngIf="isFeedEmpty">
+  <ng-container *ngIf="isFeedEmpty&&!isLoading">
     <div>Il n'y a pas de thèmes suivis. Voici les derniers articles publiés :</div>
   </ng-container>
   <div class="articles-grid">
@@ -20,6 +20,7 @@
 
 <ng-template #loading>
   <div class="loading-container">
-    <mat-spinner diameter="50"></mat-spinner>
+    <div>Récupération des articles en cours</div>
+    <div><mat-spinner diameter="50"></mat-spinner></div>
   </div>
 </ng-template>

@@ -62,8 +62,8 @@ export class RegisterComponent implements OnInit {
           Validators.required,
           Validators.minLength(8),
           Validators.maxLength(40),
-          Validators.pattern(    //Au moins une minuscule, unemajuscule, un chiffre et un symbole
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/
+          Validators.pattern(    //Au moins une minuscule, une majuscule, un chiffre et un symbole
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&+-])[A-Za-z\d@$!%*?&+-]+$/
           ),
         ],
       ],

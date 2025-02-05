@@ -57,7 +57,7 @@ export class FeedComponent implements OnInit {
       switchMap((userInfo) => {
         if (!userInfo?.themesSet || userInfo.themesSet.length === 0) {
           this.isFeedEmpty = true;
-        }
+        } else this.isFeedEmpty = false;
         return this.themesService.themes$.pipe(
           map((themes) => {
             const themeSet = userInfo?.themesSet?.length
