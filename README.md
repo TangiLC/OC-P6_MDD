@@ -1,7 +1,7 @@
 # 📝 MDD Social Network - Full-Stack Java & Angular  
 
 ![Angular](https://img.shields.io/badge/Angular-18-%23DD0031?style=&logo=angular&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.0-%236DB33F?style=&logo=springboot&logoColor=green)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1-%236DB33F?style=&logo=springboot&logoColor=green)
 ![Java](https://img.shields.io/badge/Java-21-%23ED8B00?style=&logo=openjdk&logoColor=orange)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-%234479A1?style=&logo=mysql&logoColor=blue)
 ![RxJS](https://img.shields.io/badge/RxJS-7-%23B7178C?style=&logo=reactivex&logoColor=pink)
@@ -59,7 +59,7 @@ L'application suit une architecture modulaire **SPA (Single Page Application)** 
 
 ### 📋 Cloner le projet  
 ```bash
-git clone https://github.com/TangiLC/OC-P6_MDDNet.git
+git clone https://github.com/TangiLC/OC-P6_MDD.git
 ```
 
 ### 📥 Installation & Démarrage  

@@ -59,7 +59,7 @@ export class UserPasswordComponent implements OnInit {
             Validators.minLength(8),
             Validators.maxLength(40),
             Validators.pattern(
-              //Au moins une minuscule, unemajuscule, un chiffre et un symbole
+              //Au moins une minuscule, une majuscule, un chiffre et un symbole
               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/
             ),
           ],
