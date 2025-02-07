@@ -218,7 +218,7 @@ public class ArticleController {
     articleService.deleteArticle(id);
     return ResponseEntity.noContent().build();
   }
-
+  
   /**
    * Get all articles associated with a specific theme.
    *
@@ -252,7 +252,7 @@ public class ArticleController {
     }
   )
   @Transactional(readOnly = true)
-  @GetMapping("/by_theme/{themeId}")
+  @GetMapping("/theme/{themeId}")
   public ResponseEntity<Set<ArticleDto>> getByTheme(
     @PathVariable Long themeId
   ) {
@@ -293,7 +293,7 @@ public class ArticleController {
     }
   )
   @Transactional(readOnly = true)
-  @GetMapping("/by_author/{authorId}")
+  @GetMapping("/author/{authorId}")
   public ResponseEntity<Set<ArticleDto>> getByAuthor(
     @PathVariable Long authorId
   ) {

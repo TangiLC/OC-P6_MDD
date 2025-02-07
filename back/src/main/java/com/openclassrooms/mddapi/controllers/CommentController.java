@@ -134,7 +134,7 @@ public class CommentController {
       @ApiResponse(responseCode = "404", description = "Article not found"),
     }
   )
-  @GetMapping("comments/by_article/{articleId}")
+  @GetMapping("comments/article/{articleId}")
   public ResponseEntity<List<CommentDto>> getCommentsByArticle(
     @PathVariable Long articleId
   ) {
@@ -152,7 +152,7 @@ public class CommentController {
       @ApiResponse(responseCode = "404", description = "Author not found"),
     }
   )
-  @GetMapping("comments/by_author/{authorId}")
+  @GetMapping("comments/author/{authorId}")
   public ResponseEntity<List<CommentDto>> getCommentsByAuthor(
     @PathVariable Long authorId
   ) {

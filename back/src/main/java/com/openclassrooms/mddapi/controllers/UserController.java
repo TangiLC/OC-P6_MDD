@@ -27,6 +27,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -167,7 +168,9 @@ public class UserController {
       @ApiResponse(
         responseCode = "200",
         description = "User information retrieved successfully",
-        content = @Content(schema = @Schema(implementation = UserAbstractDto.class))
+        content = @Content(
+          schema = @Schema(implementation = UserAbstractDto.class)
+        )
       ),
       @ApiResponse(
         responseCode = "404",
@@ -181,7 +184,9 @@ public class UserController {
   @GetMapping("/user/{username}")
   public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
     try {
-      UserAbstractDto userDetails = userService.getUserDetailsFromUsername(username);
+      UserAbstractDto userDetails = userService.getUserDetailsFromUsername(
+        username
+      );
       return ResponseEntity.ok(userDetails);
     } catch (Exception e) {
       return ResponseEntity
@@ -275,13 +280,13 @@ public class UserController {
       ),
     }
   )
-  @PutMapping("/user/add_theme/{id}")
+  @PostMapping("/user/theme/{themeId}")
   public ResponseEntity<?> addThemeToUser(
-    @PathVariable Long id,
+    @PathVariable Long themeId,
     @AuthenticationPrincipal UserPrincipal userPrincipal
   ) {
     try {
-      UserDto updatedUser = userService.addThemeToUser(id, userPrincipal);
+      UserDto updatedUser = userService.addThemeToUser(themeId, userPrincipal);
       return ResponseEntity.ok(updatedUser);
     } catch (AccessDeniedException e) {
       return ResponseEntity
@@ -321,13 +326,16 @@ public class UserController {
       ),
     }
   )
-  @PutMapping("/user/remove_theme/{id}")
+  @DeleteMapping("/user/theme/{themeId}")
   public ResponseEntity<?> removeThemeFromUser(
-    @PathVariable Long id,
+    @PathVariable Long themeId,
     @AuthenticationPrincipal UserPrincipal userPrincipal
   ) {
     try {
-      UserDto updatedUser = userService.removeThemeFromUser(id, userPrincipal);
+      UserDto updatedUser = userService.removeThemeFromUser(
+        themeId,
+        userPrincipal
+      );
       return ResponseEntity.ok(updatedUser);
     } catch (AccessDeniedException e) {
       return ResponseEntity

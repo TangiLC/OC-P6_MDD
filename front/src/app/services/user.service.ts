@@ -25,10 +25,10 @@ export class UserService {
   }
 
   addThemeToUser(id: number): Observable<any> {
-    return this.httpClient.put(`${this.pathService}/add_theme/${id}`, {});
+    return this.httpClient.post(`${this.pathService}/theme/${id}`, {});
   }
 
   removeThemeFromUser(id: number): Observable<any> {
-    return this.httpClient.put(`${this.pathService}/remove_theme/${id}`, {});
+    return this.httpClient.delete(`${this.pathService}/theme/${id}`, {});
   }
 }

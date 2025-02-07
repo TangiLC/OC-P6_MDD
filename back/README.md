@@ -103,16 +103,16 @@ Routes protégées (nécessitent un token JWT)
 **USER**
 - **GET /me** : Récupère les informations de l'utilisateur connecté.
 - **PUT /user/{id}** : Modifie les données de l'utilisateur.
-- **PUT /user/add_theme/{id}** : Ajoute le thème 'id' dans la liste de suivi.
-- **PUT /user/remove_theme/{id}** : Retire le thème 'id' dans la liste de suivi.
+- **POST /user/theme/{id}** : Ajoute le thème 'id' dans la liste de suivi.
+- **DELETE /user/theme/{id}** : Retire le thème 'id' dans la liste de suivi.
 
 **ARTICLE**
 - **POST /article** : Crée un nouvel article.
 - **GET /article/{id}** : Récupère les données de l'article 'id'.
 - **PUT /article/{id}** : Modifie les données de l'article 'id'.
 - **DELETE /article/{id}** : Supprime l'article 'id' de la bdd.
-- **GET /article/by_author/{authorId}** : Récupère la liste des articles créés par 'authorId'.
-- **GET /article/by_theme/{themeId}** : Récupère la liste des articles associés à 'themeId'.
+- **GET /article/author/{authorId}** : Récupère la liste des articles créés par 'authorId'.
+- **GET /article/theme/{themeId}** : Récupère la liste des articles associés à 'themeId'.
 
 **THEME**
 - **POST /theme** : Crée un nouveau thème.
@@ -126,8 +126,8 @@ Routes protégées (nécessitent un token JWT)
 - **GET /comment/{id}** : Récupère les données du commentaire 'id'.
 - **PUT /comment/{id}** : Modifie les données du commentaire 'id'.[dev en cours]
 - **DELETE /comment/{id}** : Supprime le commentaire 'id' de la bdd.[dev en cours]
-- **GET /comment/by_author/{authorId}** : Récupère la liste des commentaires créés par 'authorId'.
-- **GET /comment/by_article/{articleId}** : Récupère la liste des articles associés à l'article 'articleId'.
+- **GET /comment/author/{authorId}** : Récupère la liste des commentaires créés par 'authorId'.
+- **GET /comment/article/{articleId}** : Récupère la liste des articles associés à l'article 'articleId'.
 
 
 ---
