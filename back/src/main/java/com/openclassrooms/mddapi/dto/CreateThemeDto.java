@@ -21,11 +21,17 @@ public class CreateThemeDto {
   private String title;
 
   @NotBlank(message = "Description is required")
-  @Schema(description = "Description of the Theme", example = "Everything about Spring-boot")
+  @Schema(
+    description = "Description of the Theme",
+    example = "Everything about Spring-boot"
+  )
   private String description;
 
   @Size(max = 36)
-  @Schema(description = "uuid name of Theme icon", example = "550e8400-e29b-41d4-a716-446655440000")
+  @Schema(
+    description = "uuid name of Theme icon",
+    example = "550e8400-e29b-41d4-a716-446655440000"
+  )
   private String icon;
 
   @Pattern(

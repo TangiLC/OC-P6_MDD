@@ -6,14 +6,10 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @Builder
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "User DTO")
@@ -39,5 +35,4 @@ public class UserAbstractDto {
     example = "90ac3cab-a071-4b0e-b914-212eb78436d2"
   )
   private String picture;
-
 }

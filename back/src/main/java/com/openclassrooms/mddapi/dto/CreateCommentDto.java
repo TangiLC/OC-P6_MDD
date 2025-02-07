@@ -14,13 +14,18 @@ import lombok.NoArgsConstructor;
 @Schema(description = "DTO for creating a new comment")
 public class CreateCommentDto {
 
-    @NotBlank
-    @Schema(description = "Content of the comment", example = "This article is amazing!")
-    private String content;
+  @NotBlank
+  @Schema(
+    description = "Content of the comment",
+    example = "This article is amazing!"
+  )
+  private String content;
 
-    @Schema(description = "ID of the article associated with the comment", example = "1")
-    private Long articleId;
-
-    /*@Schema(description = "ID of the author (optional)", example = "1")
+  @Schema(
+    description = "ID of the article associated with the comment",
+    example = "1"
+  )
+  private Long articleId;
+  /*@Schema(description = "ID of the author (optional)", example = "1")
     private Long authorId;*/
 }

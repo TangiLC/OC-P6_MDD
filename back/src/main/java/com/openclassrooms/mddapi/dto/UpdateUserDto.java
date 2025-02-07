@@ -14,21 +14,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Schema(description = "User Update DTO")
 public class UpdateUserDto {
-    @Size(max = 30)
-    @Schema(description = "username", example = "myAlias1|null")
-    private String username;
 
-    @Email
-    @Size(max = 50)
-    @Schema(description = "email", example = "user@example.com|null")
-    private String email;
+  @Size(max = 30)
+  @Schema(description = "username", example = "myAlias1|null")
+  private String username;
 
-    @Size(max = 36)
-    @Schema(description = "picture uuid", example = "90ac3cab|null")
-    private String picture;
+  @Email
+  @Size(max = 50)
+  @Schema(description = "email", example = "user@example.com|null")
+  private String email;
 
-    @Size(max = 40)
-    @Schema(description = "password", example = "test123|null")
-    private String password;
+  @Size(max = 36)
+  @Schema(description = "picture uuid", example = "90ac3cab|null")
+  private String picture;
 
+  @Size(max = 40)
+  @Schema(description = "password", example = "test123|null")
+  private String password;
 }
