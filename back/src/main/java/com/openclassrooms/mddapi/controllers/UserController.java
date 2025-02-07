@@ -254,7 +254,7 @@ public class UserController {
   }
 
   @Operation(
-    summary = "Add theme to user's themes",
+    summary = "Add theme to user's themes list",
     description = "Adds a theme to the user's set of themes"
   )
   @ApiResponses(
@@ -300,7 +300,7 @@ public class UserController {
   }
 
   @Operation(
-    summary = "Remove theme from user's themes",
+    summary = "Remove theme from user's themes list",
     description = "Removes a theme from the user's set of themes"
   )
   @ApiResponses(

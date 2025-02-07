@@ -218,7 +218,7 @@ public class ArticleController {
     articleService.deleteArticle(id);
     return ResponseEntity.noContent().build();
   }
-  
+
   /**
    * Get all articles associated with a specific theme.
    *
@@ -261,11 +261,36 @@ public class ArticleController {
   }
 
   /**
+   * Force cleanup of anciens articles in theme NEWS
+   *
+   * @return ResponseEntity with message confirmation
+   */
+  @PostMapping("/cleanup")
+  @Hidden
+  public ResponseEntity<Map<String, String>> forceCleanup() {
+    try {
+      articleCleanupService.cleanupOldNewsArticles();
+      return ResponseEntity.ok(
+        Map.of("message", "Nettoyage des articles effectué avec succès")
+      );
+    } catch (Exception e) {
+      return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(
+          Map.of(
+            "message",
+            "Une erreur est survenue lors du nettoyage des articles: " +
+            e.getMessage()
+          )
+        );
+    }
+  }
+  /**
    * Get all articles created by a specific author.
    *
    * @param authorId the ID of the author
    * @return a set of articles as ArticleDto objects
-   */
+   
   @Operation(
     summary = "Get articles by author",
     description = "Retrieves all articles created by the specified author."
@@ -300,30 +325,5 @@ public class ArticleController {
     Set<ArticleDto> articles = articleService.getArticlesByAuthorId(authorId);
     return ResponseEntity.ok(articles);
   }
-
-  /**
-   * Force cleanup of anciens articles in theme NEWS
-   *
-   * @return ResponseEntity with message confirmation
-   */
-  @PostMapping("/cleanup")
-  @Hidden
-  public ResponseEntity<Map<String, String>> forceCleanup() {
-    try {
-      articleCleanupService.cleanupOldNewsArticles();
-      return ResponseEntity.ok(
-        Map.of("message", "Nettoyage des articles effectué avec succès")
-      );
-    } catch (Exception e) {
-      return ResponseEntity
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(
-          Map.of(
-            "message",
-            "Une erreur est survenue lors du nettoyage des articles: " +
-            e.getMessage()
-          )
-        );
-    }
-  }
+*/
 }

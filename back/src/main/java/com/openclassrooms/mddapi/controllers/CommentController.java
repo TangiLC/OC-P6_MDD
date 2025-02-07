@@ -124,7 +124,7 @@ public class CommentController {
     return ResponseEntity.noContent().build();
   }
 
-  @Operation(summary = "Get comments by article")
+  /*@Operation(summary = "Get comments by article")
   @ApiResponses(
     {
       @ApiResponse(
@@ -158,5 +158,5 @@ public class CommentController {
   ) {
     List<CommentDto> comments = commentService.getCommentsByAuthor(authorId);
     return ResponseEntity.ok(comments);
-  }
+  }*/
 }
